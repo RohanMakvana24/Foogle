@@ -1,0 +1,6 @@
+{
+  "name": "Foogle Cafe & Restaurant",
+  "description": "Premium restaurant and cafe website for Foogle in Panchwati, Udaipur, Rajasthan featuring categorized digital menu, signature dishes, visual gallery, and location details.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

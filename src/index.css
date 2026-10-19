@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   FOOGLE RESTAURANT & CAFE — DESIGN SYSTEM TOKENS (PHASE 1)
+   Location: Panchwati, Udaipur, Rajasthan, India
+   ========================================================================== */
+
+:root {
+  /* Brand Primary Palette (Forest Green & Refined Warm Neutrals) */
+  --color-brand-primary: #183B2B;
+  --color-brand-primary-hover: #122C20;
+  --color-brand-primary-light: #2A5A43;
+  --color-brand-surface-tint: #EEF4F0;
+
+  /* Google-Inspired Four Accent Colors (Discreet accents only) */
+  --color-accent-blue: #4285F4;
+  --color-accent-red: #EA4335;
+  --color-accent-yellow: #FBBC05;
+  --color-accent-green: #34A853;
+
+  /* Soft Accent Background Tints (for subtle indicators/swatches) */
+  --color-accent-blue-subtle: rgba(66, 133, 244, 0.10);
+  --color-accent-red-subtle: rgba(234, 67, 53, 0.10);
+  --color-accent-yellow-subtle: rgba(251, 188, 5, 0.15);
+  --color-accent-green-subtle: rgba(52, 168, 83, 0.12);
+
+  /* Light Theme Canvas & Surfaces */
+  --color-bg-page: #FAF8F5;          /* Warm Ivory */
+  --color-bg-surface: #FFFFFF;       /* Crisp White Surface */
+  --color-bg-elevated: #FFFFFF;      /* Elevated Card Surface */
+  --color-bg-subtle: #F3EFE8;        /* Soft Warm Muted Neutral */
+  --color-nav-bg: rgba(250, 248, 245, 0.94);
+
+  /* Typography Colors (Light Mode) */
+  --color-text-primary: #151E19;     /* Deep forest-charcoal (high contrast) */
+  --color-text-secondary: #47534D;   /* Muted sage-charcoal (WCAG AA/AAA compliant) */
+  --color-text-tertiary: #76837C;    /* Quiet metadata */
+  --color-text-inverse: #FAF8F5;
+
+  /* Borders & Dividers */
+  --color-border: #E2DDD2;
+  --color-border-subtle: #ECE7DD;
+  --color-border-hover: #C5BFB2;
+
+  /* Focus Ring */
+  --color-focus-ring: #183B2B;
+  --color-focus-offset: #FAF8F5;
+
+  /* Button Tokens */
+  --color-btn-primary-bg: #183B2B;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #112A1F;
+  --color-btn-secondary-bg: #FFFFFF;
+  --color-btn-secondary-text: #151E19;
+  --color-btn-secondary-border: #D8D2C4;
+  --color-btn-secondary-hover: #F3EFE8;
+
+  /* Card & Container Tokens */
+  --color-card-bg: #FFFFFF;
+  --color-card-border: #E2DDD2;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+
+  /* Shadows (Tuned to forest-tinted neutrals) */
+  --shadow-sm: 0 1px 3px 0 rgba(24, 59, 43, 0.05);
+  --shadow-card: 0 4px 16px -2px rgba(24, 59, 43, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 12px 28px -4px rgba(24, 59, 43, 0.09), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+
+  /* Container Widths */
+  --max-w-content: 1200px;
+  --max-w-narrow: 840px;
+
+  /* Typography Font Families */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* shadcn UI Compatibility Tokens */
+  --background: var(--color-bg-page);
+  --foreground: var(--color-text-primary);
+  --card: var(--color-bg-surface);
+  --card-foreground: var(--color-text-primary);
+  --popover: var(--color-bg-surface);
+  --popover-foreground: var(--color-text-primary);
+  --primary: var(--color-brand-primary);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--color-bg-subtle);
+  --secondary-foreground: var(--color-text-primary);
+  --muted: var(--color-bg-subtle);
+  --muted-foreground: var(--color-text-secondary);
+  --accent: var(--color-bg-subtle);
+  --accent-foreground: var(--color-text-primary);
+  --destructive: #EA4335;
+  --destructive-foreground: #FFFFFF;
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-brand-primary);
+  --radius: 0.625rem;
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"],
+.dark {
+  /* Brand Primary in Dark */
+  --color-brand-primary: #2D6A4F;
+  --color-brand-primary-hover: #377E5F;
+  --color-brand-primary-light: #40916C;
+  --color-brand-surface-tint: #14281E;
+
+  /* Accent Colors */
+  --color-accent-blue: #5C9CFF;
+  --color-accent-red: #F05B4E;
+  --color-accent-yellow: #FDC628;
+  --color-accent-green: #48BF67;
+
+  /* Dark Theme Canvas & Surfaces */
+  --color-bg-page: #0E1411;          /* Charcoal Deep Green Canvas */
+  --color-bg-surface: #151E19;       /* Deep Green Structural Surface */
+  --color-bg-elevated: #1B2620;      /* Elevated Card Surface */
+  --color-bg-subtle: #19231D;        /* Subtle Inset/Divider Neutral */
+  --color-nav-bg: rgba(14, 20, 17, 0.94);
+
+  /* Typography Colors (Dark Mode) */
+  --color-text-primary: #F5F2EB;     /* Warm Ivory (4.5+:1 against dark) */
+  --color-text-secondary: #A3AEA7;   /* Refined Sage Gray */
+  --color-text-tertiary: #75827B;    /* Subtle Metadata */
+  --color-text-inverse: #151E19;
+
+  /* Borders & Dividers */
+  --color-border: #233128;
+  --color-border-subtle: #1C2720;
+  --color-border-hover: #36483E;
+
+  /* Focus Ring */
+  --color-focus-ring: #48BF67;
+  --color-focus-offset: #0E1411;
+
+  /* Button Tokens */
+  --color-btn-primary-bg: #2D6A4F;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #377E5F;
+  --color-btn-secondary-bg: #1B2620;
+  --color-btn-secondary-text: #F5F2EB;
+  --color-btn-secondary-border: #2B3B31;
+  --color-btn-secondary-hover: #233128;
+
+  /* Card & Container Tokens */
+  --color-card-bg: #151E19;
+  --color-card-border: #233128;
+
+  /* Shadows (Dark Mode) */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.55), 0 2px 4px -1px rgba(0, 0, 0, 0.35);
+  --shadow-elevated: 0 12px 28px -4px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.45);
+
+  /* shadcn UI Compatibility Tokens (Dark Mode) */
+  --background: var(--color-bg-page);
+  --foreground: var(--color-text-primary);
+  --card: var(--color-bg-surface);
+  --card-foreground: var(--color-text-primary);
+  --popover: var(--color-bg-surface);
+  --popover-foreground: var(--color-text-primary);
+  --primary: var(--color-brand-primary);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--color-bg-subtle);
+  --secondary-foreground: var(--color-text-primary);
+  --muted: var(--color-bg-subtle);
+  --muted-foreground: var(--color-text-secondary);
+  --accent: var(--color-bg-subtle);
+  --accent-foreground: var(--color-text-primary);
+  --destructive: #F05B4E;
+  --destructive-foreground: #FFFFFF;
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-focus-ring);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Base Body Application */
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+/* Visible Keyboard Focus Discipline */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Keyframe Animations for Hero Entrance */
+@keyframes heroFadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroImageReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-hero-fade-rise {
+  animation: heroFadeRise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-hero-image-reveal {
+  animation: heroImageReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.animate-subtle-float {
+  animation: subtleFloat 4s ease-in-out infinite;
+}
+
+/* Stagger utility delays */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Marquee Animations (21st.dev / MagicUI / shadcn) */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 40s) linear infinite;
+}
+
