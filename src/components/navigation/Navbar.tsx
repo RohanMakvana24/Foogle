@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { BrandLogo } from '../common/BrandLogo';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { Button } from '../common/Button';
+import StarBorder from '@/components/ui/StarBorder';
 import { Container } from '../common/Container';
 import { Menu as MenuIcon, X, ArrowUpRight } from 'lucide-react';
+
 
 export interface NavItem {
   id: string;
@@ -166,14 +168,29 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-3 shrink-0">
             <ThemeToggle showLabel={false} />
 
-            <Button
-              variant="primary"
-              size="md"
-              iconRight={<ArrowUpRight className="w-4 h-4" />}
+            <StarBorder
+              as="button"
+              color="#ffffff"
+              trailColor="#ffffff"
+              duration={4}
+              direction="clockwise"
+              stars={1}
+              trailLength={0.3}
+              thickness={1}
+              radius={12}
+              glow={0.6}
+              hover="lap"
+              sparkle={false}
+              clickPulse
+              theme="dark"
+              backgroundColor="var(--color-btn-primary-bg)"
+              textColor="var(--color-btn-primary-text)"
               onClick={() => handleNavClick('#menu')}
+              className="px-4 py-2 text-xs font-semibold cursor-pointer shadow-sm"
             >
-              Explore Menu
-            </Button>
+              <span>Explore Menu</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </StarBorder>
           </div>
 
           {/* Mobile Right Bar: Mobile Theme Toggle + Hamburger Toggle */}
@@ -252,15 +269,29 @@ export const Navbar: React.FC = () => {
 
           {/* Mobile Bottom Action Strip */}
           <div className="pt-6 border-t space-y-4" style={{ borderColor: 'var(--color-border)' }}>
-            <Button
-              variant="primary"
-              size="lg"
-              fullWidth={true}
-              iconRight={<ArrowUpRight className="w-4 h-4" />}
+            <StarBorder
+              as="button"
+              color="#ffffff"
+              trailColor="#ffffff"
+              duration={4}
+              direction="clockwise"
+              stars={1}
+              trailLength={0.3}
+              thickness={1}
+              radius={12}
+              glow={0.6}
+              hover="lap"
+              sparkle={false}
+              clickPulse
+              theme="dark"
+              backgroundColor="var(--color-btn-primary-bg)"
+              textColor="var(--color-btn-primary-text)"
               onClick={() => handleNavClick('#menu')}
+              className="w-full py-3.5 text-sm font-semibold cursor-pointer"
             >
-              Explore Full Menu
-            </Button>
+              <span>Explore Full Menu</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </StarBorder>
 
             <div
               className="flex items-center justify-center gap-2 text-xs font-medium"

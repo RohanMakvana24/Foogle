@@ -1,10 +1,15 @@
 import React from 'react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
+import StarBorder from '@/components/ui/StarBorder';
+import Antigravity from '@/components/ui/Antigravity';
+import { useTheme } from '../../context/ThemeContext';
 import { HeroCulinaryShowcase } from './HeroCulinaryShowcase';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
+  const { theme } = useTheme();
+
   const scrollToAnchor = (id: string) => {
     const element = document.querySelector(id);
     if (element) {
@@ -18,7 +23,26 @@ export const HeroSection: React.FC = () => {
       aria-labelledby="hero-main-heading"
       className="relative pt-8 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-32 overflow-hidden"
     >
-      <Container>
+      {/* Background Interactive Antigravity Canvas */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+        style={{ opacity: theme === 'dark' ? 0.75 : 0.6 }}
+        aria-hidden="true"
+      >
+        <Antigravity
+          colors={['#5227FF', '#FF9FFC', '#B497CF']}
+          count={1500}
+          magnetRadius={9}
+          ringRadius={7}
+          particleSize={0.9}
+          autoAnimate={true}
+          interactive={true}
+          clickBurst={true}
+          lightMode={theme !== 'dark'}
+        />
+      </div>
+
+      <Container className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Text Content & CTAs (Cols 1-7) */}
           <div className="lg:col-span-7 flex flex-col items-start z-10 animate-hero-fade-rise">
@@ -81,15 +105,29 @@ export const HeroSection: React.FC = () => {
 
             {/* Primary & Secondary CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-              <Button
-                variant="primary"
-                size="lg"
-                iconRight={<ArrowRight className="w-4 h-4" />}
+              <StarBorder
+                as="button"
+                color="#ffffff"
+                trailColor="#ffffff"
+                duration={4}
+                direction="clockwise"
+                stars={1}
+                trailLength={0.3}
+                thickness={1}
+                radius={12}
+                glow={0.6}
+                hover="lap"
+                sparkle={false}
+                clickPulse
+                theme="dark"
+                backgroundColor="var(--color-btn-primary-bg)"
+                textColor="var(--color-btn-primary-text)"
                 onClick={() => scrollToAnchor('#menu')}
-                className="shadow-md hover:shadow-lg transition-all"
+                className="shadow-md hover:shadow-lg transition-all cursor-pointer font-semibold"
               >
-                Explore Our Menu
-              </Button>
+                <span>Explore Our Menu</span>
+                <ArrowRight className="w-4 h-4" />
+              </StarBorder>
 
               <Button
                 variant="secondary"

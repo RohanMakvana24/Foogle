@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Navbar } from './components/navigation/Navbar';
 import { HeroSection } from './components/hero/HeroSection';
 import { SignatureDishesSection } from './components/signature/SignatureDishesSection';
@@ -18,9 +18,13 @@ import { VisitCtaSection } from './components/cta/VisitCtaSection';
 import { DesignSystemPreview } from './components/preview/DesignSystemPreview';
 import { Container } from './components/common/Container';
 import { Button } from './components/common/Button';
+import { GravityFooter } from './components/footer/GravityFooter';
+import { SocialProofSection } from './components/social/SocialProofSection';
 import { SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 
+
 function FoogleWebsite() {
+  const { theme } = useTheme();
   const [showDesignTokens, setShowDesignTokens] = useState(false);
 
   return (
@@ -47,6 +51,9 @@ function FoogleWebsite() {
 
         {/* Phase 5: Customer Reviews Destination */}
         <ReviewsSection />
+
+        {/* Hanging 3D Badges: Google Review, Instagram, Facebook, Twitter on suspension wire */}
+        <SocialProofSection />
 
         {/* Phase 5: Location Information */}
         <LocationSection />
@@ -115,40 +122,8 @@ function FoogleWebsite() {
         </section>
       </main>
 
-      {/* 3. Clean, Professional Footer */}
-      <footer
-        className="border-t py-12 transition-colors duration-200"
-        style={{
-          borderColor: 'var(--color-border)',
-          backgroundColor: 'var(--color-bg-surface)',
-        }}
-      >
-        <Container>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-xs">
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3" style={{ color: 'var(--color-text-secondary)' }}>
-              <span className="font-extrabold text-sm" style={{ color: 'var(--color-text-primary)' }}>
-                Foogle
-              </span>
-              <span className="hidden sm:inline" aria-hidden="true">·</span>
-              <span>Panchwati, Udaipur, Rajasthan, India</span>
-              <span className="hidden sm:inline" aria-hidden="true">·</span>
-              <span>Contemporary Cafe &amp; Restaurant</span>
-            </div>
-
-            <div className="flex items-center gap-4" style={{ color: 'var(--color-text-tertiary)' }}>
-              <a href="#home" className="hover:underline">Back to top</a>
-              <span aria-hidden="true">·</span>
-              <a href="#menu" className="hover:underline">Menu</a>
-              <span aria-hidden="true">·</span>
-              <a href="#story" className="hover:underline">About</a>
-              <span aria-hidden="true">·</span>
-              <a href="#gallery" className="hover:underline">Gallery</a>
-              <span aria-hidden="true">·</span>
-              <a href="#contact" className="hover:underline">Contact</a>
-            </div>
-          </div>
-        </Container>
-      </footer>
+      {/* 3. Gravity Letters Interactive Footer */}
+      <GravityFooter />
     </div>
   );
 }

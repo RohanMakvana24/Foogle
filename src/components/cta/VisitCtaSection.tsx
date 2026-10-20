@@ -1,7 +1,9 @@
 import React from 'react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
+import StarBorder from '@/components/ui/StarBorder';
 import { Utensils } from 'lucide-react';
+
 
 export const VisitCtaSection: React.FC = () => {
   const scrollToMenu = () => {
@@ -70,15 +72,29 @@ export const VisitCtaSection: React.FC = () => {
 
           {/* Primary Action Button: Smooth scroll to #menu */}
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
-            <Button
-              variant="primary"
-              size="lg"
-              iconRight={<Utensils className="w-4 h-4" />}
+            <StarBorder
+              as="button"
+              color="#ffffff"
+              trailColor="#ffffff"
+              duration={4}
+              direction="clockwise"
+              stars={1}
+              trailLength={0.3}
+              thickness={1}
+              radius={12}
+              glow={0.6}
+              hover="lap"
+              sparkle={false}
+              clickPulse
+              theme="dark"
+              backgroundColor="var(--color-btn-primary-bg)"
+              textColor="var(--color-btn-primary-text)"
               onClick={scrollToMenu}
-              className="shadow-md hover:shadow-lg"
+              className="shadow-md hover:shadow-lg transition-all cursor-pointer font-semibold"
             >
-              Explore the Menu
-            </Button>
+              <span>Explore the Menu</span>
+              <Utensils className="w-4 h-4 ml-1" />
+            </StarBorder>
           </div>
 
           {/* Quiet Note */}

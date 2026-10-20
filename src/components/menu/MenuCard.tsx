@@ -4,15 +4,18 @@ import { MenuFoodVisual } from './MenuFoodVisual';
 
 export interface MenuCardProps {
   item: MenuItem;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export const MenuCard: React.FC<MenuCardProps> = ({ item }) => {
+export const MenuCard: React.FC<MenuCardProps> = ({ item, className = '', style = {} }) => {
   return (
     <article
-      className="group h-full flex flex-col justify-between rounded-[var(--radius-lg)] border transition-all duration-200 hover:-translate-y-1 hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--color-focus-ring)]"
+      className={`group h-full flex flex-col justify-between rounded-[var(--radius-lg)] border transition-all duration-200 hover:-translate-y-1 hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--color-focus-ring)] ${className}`}
       style={{
         backgroundColor: 'var(--color-card-bg)',
         borderColor: 'var(--color-card-border)',
+        ...style,
       }}
     >
       <div>

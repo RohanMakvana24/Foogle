@@ -83,15 +83,56 @@ export const MenuSection: React.FC = () => {
           />
         </div>
 
-        {/* Responsive Food Cards Grid */}
+        {/* Scroll-Driven Animation Style Injection */}
+        <style>{`
+          @keyframes menu-slide-in {
+            from {
+              opacity: 0;
+              transform: scale(0.9) translateY(24px) rotate(calc(var(--side, 1) * (3deg * var(--amp, 1))));
+            }
+            to {
+              opacity: 1;
+              transform: scale(1) translateY(0) rotate(0deg);
+            }
+          }
+
+          .menu-card-scroll-wrapper {
+            &:nth-of-type(2n + 1) { transform-origin: 25vw 100%; }
+            &:nth-of-type(2n) { transform-origin: -25vw 100%; }
+
+            @media (min-width: 768px) {
+              &:nth-of-type(3n + 1) { transform-origin: 33vw 100%; }
+              &:nth-of-type(3n + 2) { transform-origin: 0 100%; }
+              &:nth-of-type(3n) { transform-origin: -33vw 100%; }
+            }
+
+            @media (prefers-reduced-motion: no-preference) {
+              animation: menu-slide-in linear both;
+              animation-timeline: view();
+              animation-range: entry 0% cover 20%;
+            }
+          }
+        `}</style>
+
+        {/* Responsive Food Cards Grid with Scroll Animation */}
         <div
           id="menu-items-grid"
           role="region"
           aria-label="Menu Items List"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
-          {filteredItems.map((item) => (
-            <MenuCard key={item.id} item={item} />
+          {filteredItems.map((item, index) => (
+            <MenuCard
+              key={item.id}
+              item={item}
+              className="menu-card-scroll-wrapper"
+              style={
+                {
+                  '--side': index % 2 === 0 ? 1 : -1,
+                  '--amp': Math.max(1, (index % 3)),
+                } as React.CSSProperties
+              }
+            />
           ))}
         </div>
 
