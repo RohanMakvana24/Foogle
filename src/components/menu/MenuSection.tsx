@@ -3,9 +3,10 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { MenuCategories } from './MenuCategories';
 import { MenuCard } from './MenuCard';
+import { CoverflowCarousel, CoverflowSlide } from '@/components/ui/coverflow-carousel';
 import { MENU_CATEGORIES, MENU_ITEMS } from '../../data/menuData';
 import { MenuCategoryId } from '../../types/menu';
-import { Sparkles, Info, ArrowRight } from 'lucide-react';
+import { Sparkles, Info, ArrowRight, HandMetal, Smartphone } from 'lucide-react';
 
 export const MenuSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<MenuCategoryId>('all');
@@ -37,11 +38,27 @@ export const MenuSection: React.FC = () => {
     return MENU_ITEMS.filter((item) => item.categoryId === activeCategory);
   }, [activeCategory]);
 
+  // Convert filtered items to Coverflow slides for interactive mobile carousel
+  const coverflowSlides = useMemo<CoverflowSlide[]>(() => {
+    return filteredItems.map((item) => ({
+      src: item.imageUrl || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80',
+      alt: item.name,
+      title: item.name,
+      subtitle: item.description,
+      tag: item.categoryLabel,
+      meta: [
+        { label: 'Category', value: item.categoryLabel },
+        { label: 'Crafted In', value: 'Panchwati, Udaipur' },
+      ],
+      isVeg: true,
+    }));
+  }, [filteredItems]);
+
   return (
     <section
       id="menu"
       aria-labelledby="menu-main-heading"
-      className="py-16 sm:py-24 border-t scroll-mt-20 transition-colors duration-200"
+      className="py-14 sm:py-20 border-t scroll-mt-20 transition-colors duration-200"
       style={{
         backgroundColor: 'var(--color-bg-page)',
         borderColor: 'var(--color-border-subtle)',
@@ -49,13 +66,15 @@ export const MenuSection: React.FC = () => {
     >
       <Container>
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-          <SectionHeading
-            eyebrow="MADE FOR YOUR CRAVINGS"
-            title="Explore Our Menu"
-            description="From comforting classics to exciting cafe favourites, find something you'll love."
-            titleLevel="h2"
-          />
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
+          <div>
+            <SectionHeading
+              eyebrow="MADE FOR YOUR CRAVINGS"
+              title="Explore Our Menu"
+              description="From comforting classics to exciting cafe favourites, find something you'll love."
+              titleLevel="h2"
+            />
+          </div>
 
           {/* Quick Stats / Active Category Indicator */}
           <div
@@ -74,7 +93,7 @@ export const MenuSection: React.FC = () => {
         </div>
 
         {/* Category Navigation Bar */}
-        <div className="mb-10">
+        <div className="mb-8">
           <MenuCategories
             categories={MENU_CATEGORIES}
             activeCategory={activeCategory}
@@ -83,7 +102,28 @@ export const MenuSection: React.FC = () => {
           />
         </div>
 
-        {/* Scroll-Driven Animation Style Injection */}
+        {/* MOBILE VIEW ONLY: 3D Coverflow Carousel (Eliminates excessive vertical scrolling) */}
+        <div className="block sm:hidden mb-6">
+          <div className="mb-2 flex items-center justify-between px-1 text-[11px] text-zinc-500 font-medium">
+            <span className="flex items-center gap-1 text-amber-700 dark:text-amber-300 font-semibold">
+              <Smartphone className="w-3 h-3" />
+              Swipe 3D Menu
+            </span>
+            <span>Tap arrow or drag cards</span>
+          </div>
+
+          <CoverflowCarousel
+            key={activeCategory}
+            slides={coverflowSlides}
+            showCaption={true}
+            showNavigation={true}
+            showPagination={true}
+            cardWidth="clamp(210px, 66vw, 270px)"
+            className="pb-2"
+          />
+        </div>
+
+        {/* Scroll-Driven Animation Style Injection for Desktop Grid */}
         <style>{`
           @keyframes menu-slide-in {
             from {
@@ -114,12 +154,12 @@ export const MenuSection: React.FC = () => {
           }
         `}</style>
 
-        {/* Responsive Food Cards Grid with Scroll Animation */}
+        {/* DESKTOP & TABLET VIEW ONLY: Responsive Food Cards Bento Grid */}
         <div
           id="menu-items-grid"
           role="region"
           aria-label="Menu Items List"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
           {filteredItems.map((item, index) => (
             <MenuCard
@@ -129,7 +169,7 @@ export const MenuSection: React.FC = () => {
               style={
                 {
                   '--side': index % 2 === 0 ? 1 : -1,
-                  '--amp': Math.max(1, (index % 3)),
+                  '--amp': Math.max(1, index % 3),
                 } as React.CSSProperties
               }
             />
@@ -138,7 +178,7 @@ export const MenuSection: React.FC = () => {
 
         {/* Informative Disclaimer Banner (Phase 3 Owner Confirmation Note) */}
         <div
-          className="mt-14 p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          className="mt-12 sm:mt-14 p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
           style={{
             backgroundColor: 'var(--color-bg-surface)',
             borderColor: 'var(--color-border)',
@@ -172,3 +212,5 @@ export const MenuSection: React.FC = () => {
     </section>
   );
 };
+
+export default MenuSection;

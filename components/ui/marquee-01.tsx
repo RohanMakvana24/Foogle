@@ -6,42 +6,60 @@ const reviews = [
     name: "Ken Masters",
     username: "@kmasters",
     body: "“Our productivity has nearly doubled since onboarding. Automation features removed repetitive tasks, allowing our team to focus on building instead of managing operations.”",
-    profile: "https://cdn.21st.dev/assets/mirror/b5/b539abc60701ab924b178ba9d8db1946.jpg",
+    profile: "https://cdn.21st.dev/assets/mirror/b5/b539abc60701ab9cbcd73f9241d13a14a09582a4fd06c65784cb5567d77a2e0e.webp",
   },
   {
-    name: "Ryu Hoshi",
-    username: "@ryu_focus",
-    body: "“The transition was seamless. We’ve cut down deployment cycles by 40% and our engineering team feels significantly more agile now.”",
-    profile: "https://cdn.21st.dev/assets/mirror/92/92476579b29cb115aa0cbccbd48f76d4.jpg",
+    name: "Kira Athrun",
+    username: "@kathrun",
+    body: "“What surprised us most was how quickly our team adapted. Minimal learning curve, excellent documentation, and powerful features make it a must-have for modern SaaS companies.”",
+    profile: "https://cdn.21st.dev/assets/mirror/2b/2bc5f22fa3400c61a2161d14e3dce5a0804badebfc1b3d9cbe844feaa3b72180.webp",
   },
   {
-    name: "Chun-Li Zhang",
-    username: "@chunli_ops",
-    body: "“Customer satisfaction ratings jumped within weeks. The interface is intuitive, and our support team resolve issues faster than ever.”",
-    profile: "https://cdn.21st.dev/assets/mirror/e6/e6ba157c917246ba7ee0a4ecbf6aa431.jpg",
+    name: "Lirael Nassun",
+    username: "@lnassun",
+    body: "“This is easily one of the most reliable SaaS tools we’ve adopted. The UI is intuitive, integrations are seamless, and it saves us countless hours every week.”",
+    profile: "https://cdn.21st.dev/assets/mirror/e1/e1e172821860559f890ef5ef7c14cc66a6c1ec001f3bbeb6dddd349c0081dd6b.webp",
   },
   {
-    name: "Guile",
-    username: "@major_guile",
-    body: "“Rock-solid reliability. Even during peak traffic surges, performance remained uncompromised. It simply works when you need it most.”",
-    profile: "https://cdn.21st.dev/assets/mirror/40/409dca8bbca0f3a696eeaa501066d926.jpg",
+    name: "Jessica",
+    username: "@jessica",
+    body: "Switching to this platform streamlined our entire workflow. Setup was effortless, performance improved instantly, and our team now ships features faster without worrying about infrastructure.",
+    profile: "https://cdn.21st.dev/assets/mirror/61/61fda783ca2662349458bad61a434038016f05d6a14bd7c5a314f48c8ee8be03.webp",
   },
   {
-    name: "Cammy White",
-    username: "@cammy_security",
-    body: "“Security compliance used to be a headache. Now everything is streamlined, auditable, and stress-free for our compliance audits.”",
-    profile: "https://cdn.21st.dev/assets/mirror/5a/5a9147f1c3f91da6bc86e24db498a5e3.jpg",
+    name: "Jenny",
+    username: "@jenny",
+    body: "“We evaluated multiple solutions, but this stood out immediately. It’s fast, scalable, and thoughtfully designed for growing teams that need stability without added complexity.”",
+    profile: "https://cdn.21st.dev/assets/mirror/c5/c5ee2e124ea7334450d30a46607f793534f567e97d4b708cda110a06aeed4953.webp",
   },
   {
-    name: "Dhalsim",
-    username: "@dhalsim_zen",
-    body: "“Brought harmony to cross-department collaboration. Marketing, product, and sales are finally in sync and working with clarity.”",
-    profile: "https://cdn.21st.dev/assets/mirror/8b/8b24da44ec5e96a2fa8087959082216d.jpg",
+    name: "Kira Athrun",
+    username: "@kathrun",
+    body: "“What surprised us most was how quickly our team adapted. Minimal learning curve, excellent documentation, and powerful features make it a must-have for modern SaaS companies.”",
+    profile: "https://cdn.21st.dev/assets/mirror/2b/2bc5f22fa3400c61a2161d14e3dce5a0804badebfc1b3d9cbe844feaa3b72180.webp",
+  },
+  {
+    name: "Ken Masters",
+    username: "@kmasters",
+    body: "“Our productivity has nearly doubled since onboarding. Automation features removed repetitive tasks, allowing our team to focus on building instead of managing operations.”",
+    profile: "https://cdn.21st.dev/assets/mirror/b5/b539abc60701ab9cbcd73f9241d13a14a09582a4fd06c65784cb5567d77a2e0e.webp",
+  },
+  {
+    name: "Jessica",
+    username: "@jessica",
+    body: "Switching to this platform streamlined our entire workflow. Setup was effortless, performance improved instantly, and our team now ships features faster without worrying about infrastructure.",
+    profile: "https://cdn.21st.dev/assets/mirror/61/61fda783ca2662349458bad61a434038016f05d6a14bd7c5a314f48c8ee8be03.webp",
+  },
+  {
+    name: "Jenny",
+    username: "@jenny",
+    body: "“We evaluated multiple solutions, but this stood out immediately. It’s fast, scalable, and thoughtfully designed for growing teams that need stability without added complexity.”",
+    profile: "https://cdn.21st.dev/assets/mirror/c5/c5ee2e124ea7334450d30a46607f793534f567e97d4b708cda110a06aeed4953.webp",
   },
 ];
 
-const firstRow = reviews.slice(0, Math.ceil(reviews.length / 2));
-const secondRow = reviews.slice(Math.ceil(reviews.length / 2));
+const firstRow = reviews.slice(0, reviews.length / 2);
+const secondRow = reviews.slice(reviews.length / 2);
 
 function ReviewCard({
   profile,
@@ -55,30 +73,22 @@ function ReviewCard({
   body: string;
 }) {
   return (
-    <Card className="w-80 cursor-pointer overflow-hidden border transition-all duration-300 hover:shadow-md hover:border-emerald-600/40">
-      <CardContent className="p-4">
+    <Card className="w-80 cursor-pointer overflow-hidden border transition-all duration-300 hover:shadow-lg">
+      <CardContent className="p-4 flex flex-col justify-between h-full">
         <div className="flex items-center gap-3">
           <img
-            className="h-10 w-10 rounded-full object-cover border border-stone-200 dark:border-stone-700"
+            className="h-10 w-10 rounded-full object-cover"
             alt={name}
             src={profile}
-            loading="lazy"
-            onError={(e) => {
-              // Resilient fallback avatar if external asset fails to load
-              (e.currentTarget as HTMLImageElement).src =
-                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23183B2B'/%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' fill='%23ffffff' font-family='sans-serif' font-size='14' dy='.3em'%3E" +
-                name.charAt(0) +
-                "%3C/text%3E%3C/svg%3E";
-            }}
           />
           <div className="flex flex-col">
-            <figcaption className="text-sm font-semibold text-foreground">
+            <figcaption className="text-sm font-medium text-foreground">
               {name}
             </figcaption>
-            <p className="text-xs font-normal text-muted-foreground">{username}</p>
+            <p className="text-xs text-muted-foreground">{username}</p>
           </div>
         </div>
-        <blockquote className="mt-3 text-xs sm:text-sm text-foreground/85 leading-relaxed italic">
+        <blockquote className="mt-3 text-sm text-foreground/80">
           {body}
         </blockquote>
       </CardContent>
@@ -86,39 +96,21 @@ function ReviewCard({
   );
 }
 
-export function MarqueeDemo({ className }: { className?: string }) {
+export function MarqueeDemo() {
   return (
-    <div
-      className={`relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-xl py-4 ${
-        className || ""
-      }`}
-    >
-      <Marquee pauseOnHover className="[--duration:24s]">
-        {firstRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg">
+      <Marquee pauseOnHover className="[--duration:20s]">
+        {firstRow.map((review, index) => (
+          <ReviewCard key={index} {...review} />
         ))}
       </Marquee>
-      <Marquee reverse pauseOnHover className="[--duration:24s] mt-2">
-        {secondRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+      <Marquee reverse pauseOnHover className="[--duration:20s]">
+        {secondRow.map((review, index) => (
+          <ReviewCard key={index} {...review} />
         ))}
       </Marquee>
-
-      {/* Edge Gradients */}
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, var(--color-bg-page), transparent)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l"
-        style={{
-          backgroundImage:
-            "linear-gradient(to left, var(--color-bg-page), transparent)",
-        }}
-      />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background"></div>
     </div>
   );
 }

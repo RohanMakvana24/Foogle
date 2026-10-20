@@ -14,19 +14,12 @@ import {
   useSphericalJoint,
 } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
+import { createCleanBadgeCanvasTexture, createCleanBandCanvasTexture } from './badgeTextures';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 if (typeof window !== 'undefined') {
   useGLTF.preload('/models/tag.glb');
-  useTexture.preload('/textures/google_badge.jpg');
-  useTexture.preload('/textures/google_band.jpg');
-  useTexture.preload('/textures/instagram_badge.jpg');
-  useTexture.preload('/textures/instagram_band.jpg');
-  useTexture.preload('/textures/facebook_badge.jpg');
-  useTexture.preload('/textures/facebook_band.jpg');
-  useTexture.preload('/textures/twitter_badge.jpg');
-  useTexture.preload('/textures/twitter_band.jpg');
 }
 
 export interface BadgeCardConfig {
@@ -82,16 +75,8 @@ function SingleHangingBadge({
   );
 
   const { nodes, materials } = useGLTF('/models/tag.glb');
-  const bandTex = useTexture(config.bandTexture);
-  const badgeTex = useTexture(config.badgeTexture);
-
-  useMemo(() => {
-    bandTex.wrapS = bandTex.wrapT = THREE.RepeatWrapping;
-    bandTex.repeat.set(2, 1);
-    badgeTex.flipY = false;
-    badgeTex.colorSpace = THREE.SRGBColorSpace;
-    badgeTex.anisotropy = 16;
-  }, [bandTex, badgeTex]);
+  const badgeTex = useMemo(() => createCleanBadgeCanvasTexture(config.id), [config.id]);
+  const bandTex = useMemo(() => createCleanBandCanvasTexture(config.id), [config.id]);
 
   const [curve] = useState(
     () =>
@@ -235,10 +220,10 @@ function SingleHangingBadge({
             <meshPhysicalMaterial
               map={badgeTex}
               clearcoat={1}
-              clearcoatRoughness={0.1}
-              roughness={0.22}
-              metalness={0.45}
-              envMapIntensity={1.2}
+              clearcoatRoughness={0.06}
+              roughness={0.12}
+              metalness={0.03}
+              envMapIntensity={0.9}
             />
           </mesh>
           <mesh

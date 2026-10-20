@@ -28,12 +28,12 @@ function FoogleWebsite() {
   const [showDesignTokens, setShowDesignTokens] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col w-full overflow-x-hidden">
-      {/* 1. Premium Sticky Navigation Bar */}
+    <div className="min-h-screen flex flex-col w-full overflow-x-clip">
+      {/* 1. Premium Fixed Navigation Bar */}
       <Navbar />
 
-      {/* 2. Main Page Content */}
-      <main className="flex-1">
+      {/* 2. Main Page Content (offset by fixed 72px navbar) */}
+      <main className="flex-1 pt-[72px]">
         {/* Phase 2: Hero Section (Anchor #home) */}
         <HeroSection />
 

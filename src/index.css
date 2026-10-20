@@ -284,6 +284,11 @@ body {
 }
 
 /* Marquee Animations (21st.dev / MagicUI / shadcn) */
+@theme inline {
+  --animate-marquee: marquee var(--duration, 40s) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear infinite;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -308,5 +313,10 @@ body {
 
 .animate-marquee-vertical {
   animation: marquee-vertical var(--duration, 40s) linear infinite;
+}
+
+.marquee-reverse,
+[data-reverse="true"] {
+  animation-direction: reverse !important;
 }
 

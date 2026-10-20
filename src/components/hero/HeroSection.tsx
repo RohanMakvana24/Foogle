@@ -2,7 +2,6 @@ import React from 'react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
 import StarBorder from '@/components/ui/StarBorder';
-import Antigravity from '@/components/ui/Antigravity';
 import { useTheme } from '../../context/ThemeContext';
 import { HeroCulinaryShowcase } from './HeroCulinaryShowcase';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
@@ -23,24 +22,14 @@ export const HeroSection: React.FC = () => {
       aria-labelledby="hero-main-heading"
       className="relative pt-8 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-32 overflow-hidden"
     >
-      {/* Background Interactive Antigravity Canvas */}
+      {/* Soft Ambient Atmosphere Glow (Clean, static & performant) */}
       <div
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
-        style={{ opacity: theme === 'dark' ? 0.75 : 0.6 }}
+        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[140px] opacity-25 dark:opacity-15"
+        style={{
+          background: 'radial-gradient(circle, var(--color-brand-primary) 0%, rgba(217, 119, 6, 0.3) 40%, transparent 75%)',
+        }}
         aria-hidden="true"
-      >
-        <Antigravity
-          colors={['#5227FF', '#FF9FFC', '#B497CF']}
-          count={1500}
-          magnetRadius={9}
-          ringRadius={7}
-          particleSize={0.9}
-          autoAnimate={true}
-          interactive={true}
-          clickBurst={true}
-          lightMode={theme !== 'dark'}
-        />
-      </div>
+      />
 
       <Container className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
