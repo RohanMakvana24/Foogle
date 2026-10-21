@@ -19,7 +19,6 @@ import { DesignSystemPreview } from './components/preview/DesignSystemPreview';
 import { Container } from './components/common/Container';
 import { Button } from './components/common/Button';
 import { GravityFooter } from './components/footer/GravityFooter';
-import { SocialProofSection } from './components/social/SocialProofSection';
 import { SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 
 
@@ -51,9 +50,6 @@ function FoogleWebsite() {
 
         {/* Phase 5: Customer Reviews Destination */}
         <ReviewsSection />
-
-        {/* Hanging 3D Badges: Google Review, Instagram, Facebook, Twitter on suspension wire */}
-        <SocialProofSection />
 
         {/* Phase 5: Location Information */}
         <LocationSection />

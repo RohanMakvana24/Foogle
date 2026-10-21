@@ -1,14 +1,9 @@
 import React from 'react';
 import { Container } from '../common/Container';
-import { Button } from '../common/Button';
-import StarBorder from '@/components/ui/StarBorder';
-import { useTheme } from '../../context/ThemeContext';
-import { HeroCulinaryShowcase } from './HeroCulinaryShowcase';
+import { HeroCharacterShowcase } from './HeroCharacterShowcase';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
-  const { theme } = useTheme();
-
   const scrollToAnchor = (id: string) => {
     const element = document.querySelector(id);
     if (element) {
@@ -20,139 +15,109 @@ export const HeroSection: React.FC = () => {
     <section
       id="home"
       aria-labelledby="hero-main-heading"
-      className="relative pt-8 pb-16 sm:pt-14 sm:pb-24 lg:pt-20 lg:pb-32 overflow-hidden"
+      className="relative min-h-[calc(100vh-72px)] flex items-center overflow-hidden py-14 sm:py-20 lg:py-24"
+      style={{
+        backgroundColor: '#C51E28', // Exact matching rich red from the video
+      }}
     >
-      {/* Soft Ambient Atmosphere Glow (Clean, static & performant) */}
+      {/* 1. Full-Size Mouse-Scrubbed 3D Cartoon Character (No box, no border, full size) */}
+      <HeroCharacterShowcase />
+
+      {/* 2. Soft Gradient Vignette on Left for Crisp Text Readability */}
       <div
-        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[140px] opacity-25 dark:opacity-15"
-        style={{
-          background: 'radial-gradient(circle, var(--color-brand-primary) 0%, rgba(217, 119, 6, 0.3) 40%, transparent 75%)',
-        }}
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/60 via-black/30 to-transparent sm:from-black/55 sm:via-black/20 lg:from-black/40"
         aria-hidden="true"
       />
 
-      <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Left Column: Text Content & CTAs (Cols 1-7) */}
-          <div className="lg:col-span-7 flex flex-col items-start z-10 animate-hero-fade-rise">
-            {/* Brand Eyebrow with Four Accent Pips */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6 select-none"
-              style={{
-                backgroundColor: 'var(--color-bg-surface)',
-                borderColor: 'var(--color-border)',
-              }}
-            >
-              {/* Four Google-inspired subtle accent dots */}
-              <div className="flex items-center gap-1 shrink-0" aria-hidden="true">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-blue)' }} />
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-red)' }} />
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-yellow)' }} />
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }} />
-              </div>
-
-              <span
-                className="text-xs font-bold tracking-wider uppercase"
-                style={{ color: 'var(--color-brand-primary)' }}
-              >
-                FOOGLE • CAFE &amp; GOOD FOOD
-              </span>
+      {/* 3. Hero Content Container on the Left */}
+      <Container className="relative z-10 w-full">
+        <div className="max-w-xl lg:max-w-2xl flex flex-col items-start animate-hero-fade-rise">
+          {/* Brand Eyebrow with Four Google Accent Pips */}
+          <div
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full backdrop-blur-md border mb-6 select-none shadow-md"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              borderColor: 'rgba(255, 255, 255, 0.25)',
+              color: '#FFFFFF',
+            }}
+          >
+            <div className="flex items-center gap-1 shrink-0" aria-hidden="true">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4285F4' }} />
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#EA4335' }} />
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#FBBC05' }} />
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#34A853' }} />
             </div>
 
-            {/* Main Editorial Headline */}
-            <h1
-              id="hero-main-heading"
-              className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] mb-6"
-              style={{
-                color: 'var(--color-text-primary)',
-                textWrap: 'balance',
-                letterSpacing: '-0.035em',
-              }}
-            >
-              Good Food.
-              <br />
-              <span
-                className="relative inline-block"
-                style={{
-                  color: 'var(--color-brand-primary)',
-                }}
-              >
-                Great Moods.
-              </span>
-            </h1>
-
-            {/* Supporting Copy */}
-            <p
-              className="text-base sm:text-lg lg:text-xl leading-relaxed mb-8 max-w-xl"
-              style={{
-                color: 'var(--color-text-secondary)',
-                textWrap: 'pretty',
-              }}
-            >
-              Discover your next favourite bite at Foogle, where comforting classics meet
-              exciting cafe flavours in the heart of Udaipur.
-            </p>
-
-            {/* Primary & Secondary CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-              <StarBorder
-                as="button"
-                color="#ffffff"
-                trailColor="#ffffff"
-                duration={4}
-                direction="clockwise"
-                stars={1}
-                trailLength={0.3}
-                thickness={1}
-                radius={12}
-                glow={0.6}
-                hover="lap"
-                sparkle={false}
-                clickPulse
-                theme="dark"
-                backgroundColor="var(--color-btn-primary-bg)"
-                textColor="var(--color-btn-primary-text)"
-                onClick={() => scrollToAnchor('#menu')}
-                className="shadow-md hover:shadow-lg transition-all cursor-pointer font-semibold"
-              >
-                <span>Explore Our Menu</span>
-                <ArrowRight className="w-4 h-4" />
-              </StarBorder>
-
-              <Button
-                variant="secondary"
-                size="lg"
-                iconLeft={<MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
-                onClick={() => scrollToAnchor('#contact')}
-              >
-                Find Us
-              </Button>
-            </div>
-
-            {/* Curated Culinary Quality Highlights (Clean unboxed text, zero pills) */}
-            <div
-              className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-8 mt-8 border-t text-xs font-medium w-full"
-              style={{
-                borderColor: 'var(--color-border-subtle)',
-                color: 'var(--color-text-secondary)',
-              }}
-            >
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-brand-primary)' }} />
-                <span>Woodfired Artisan Crusts</span>
-              </div>
-              <span aria-hidden="true">·</span>
-              <span>Handcrafted Espresso &amp; Beverages</span>
-              <span aria-hidden="true">·</span>
-              <span>Panchwati, Udaipur</span>
-            </div>
+            <span className="text-xs font-bold tracking-wider uppercase text-white/95">
+              FOOGLE • CAFE &amp; GOOD FOOD
+            </span>
           </div>
 
-          {/* Right Column: Layered Food Photography Composition (Cols 8-12) */}
-          <div className="lg:col-span-5 relative mt-4 lg:mt-0">
-            <HeroCulinaryShowcase />
+          {/* Main Editorial Headline */}
+          <h1
+            id="hero-main-heading"
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] mb-6 text-white drop-shadow-sm"
+            style={{
+              textWrap: 'balance',
+              letterSpacing: '-0.035em',
+            }}
+          >
+            Good Food.
+            <br />
+            <span
+              className="relative inline-block text-amber-200"
+            >
+              Great Moods.
+            </span>
+          </h1>
+
+          {/* Supporting Copy */}
+          <p
+            className="text-base sm:text-lg lg:text-xl leading-relaxed mb-8 max-w-xl text-white/90 font-medium drop-shadow-xs"
+            style={{
+              textWrap: 'pretty',
+            }}
+          >
+            Discover your next favourite bite at Foogle, where comforting classics meet
+            exciting cafe flavours in the heart of Udaipur.
+          </p>
+
+          {/* Primary & Secondary CTAs */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
+            <button
+              onClick={() => scrollToAnchor('#menu')}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-zinc-950 font-bold text-sm sm:text-base hover:bg-zinc-100 transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>Explore Our Menu</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => scrollToAnchor('#contact')}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-black/35 hover:bg-black/50 backdrop-blur-md border border-white/30 text-white font-semibold text-sm sm:text-base transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+            >
+              <MapPin className="w-4 h-4 text-emerald-400" />
+              <span>Find Us</span>
+            </button>
+          </div>
+
+          {/* Curated Culinary Quality Highlights */}
+          <div
+            className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-8 mt-8 border-t border-white/20 text-xs font-medium w-full text-white/80"
+          >
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Woodfired Artisan Crusts</span>
+            </div>
+            <span aria-hidden="true" className="opacity-60">·</span>
+            <span>Handcrafted Espresso &amp; Beverages</span>
+            <span aria-hidden="true" className="opacity-60">·</span>
+            <span>Panchwati, Udaipur</span>
           </div>
         </div>
       </Container>
     </section>
   );
 };
+
+export default HeroSection;

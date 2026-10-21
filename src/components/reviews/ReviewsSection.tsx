@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Marquee } from '@/components/ui/3d-testimonails';
 import { FOOGLE_BUSINESS_INFO } from '../../data/businessInfo';
 import { MessageSquareHeart, ExternalLink, Star, Quote, Sparkles, CheckCircle2 } from 'lucide-react';
+import { LanyardBadgesSection } from '../social/LanyardBadgesSection';
 
 interface ReviewData {
   name: string;
@@ -323,6 +324,9 @@ export const ReviewsSection: React.FC = () => {
               </a>
             </div>
           </div>
+
+          {/* Interactive 3D Hanging Lanyard Badges (Google Review, Instagram, Facebook) */}
+          <LanyardBadgesSection />
         </Container>
       </div>
     </section>
