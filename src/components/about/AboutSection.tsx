@@ -38,12 +38,11 @@ export const AboutSection: React.FC = () => {
               }}
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
-                {/* Real Cafe Photography */}
+                {/* Real Foogle Cafe Entrance Photography */}
                 <img
-                  src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000&auto=format&fit=crop&q=80"
-                  alt="Foogle cafe dining space with warm ambiance and modern seating in Panchwati, Udaipur"
+                  src="/images/foogle-entrance-hero.jpg"
+                  alt="Foogle Cafe colorful neon facade and outdoor dining in Panchwati, Udaipur"
                   loading="lazy"
-                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
                 />
 
@@ -52,7 +51,7 @@ export const AboutSection: React.FC = () => {
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     background:
-                      'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.15) 100%)',
+                      'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.2) 100%)',
                   }}
                   aria-hidden="true"
                 />
@@ -66,11 +65,11 @@ export const AboutSection: React.FC = () => {
 
                 {/* Subtle Image Tag */}
                 <div className="absolute bottom-3 left-4 flex flex-col text-white/95 text-xs drop-shadow-md">
-                  <span className="font-bold tracking-tight">
-                    Panchwati Dining Space
+                  <span className="font-bold tracking-tight text-white drop-shadow">
+                    Foogle Cafe &amp; Resto
                   </span>
-                  <span className="text-[11px] text-white/80 font-medium">
-                    Udaipur, Rajasthan · Contemporary Cafe
+                  <span className="text-[11px] text-white/90 font-medium drop-shadow">
+                    Panchwati Circle, Udaipur · Casual Dining &amp; Shakes
                   </span>
                 </div>
               </div>

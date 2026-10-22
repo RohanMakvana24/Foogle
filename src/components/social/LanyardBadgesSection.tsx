@@ -96,34 +96,34 @@ export const LanyardBadgesSection: React.FC = () => {
         {/* Instagram CTA */}
         <div className="flex flex-col items-center gap-1.5 text-center">
           <a
-            href="https://instagram.com/fooglecafe"
+            href="https://www.instagram.com/foogle_foods/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full max-w-[260px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all hover:scale-105 shadow-md bg-gradient-to-r from-rose-500 via-pink-600 to-purple-600 hover:opacity-95 text-white cursor-pointer"
           >
             <Instagram className="w-3.5 h-3.5 text-white" />
-            <span>Follow @fooglecafe</span>
+            <span>Follow foogle_foods</span>
             <ExternalLink className="w-3 h-3 ml-0.5" />
           </a>
           <span className="text-[11px] text-zinc-400 font-medium">
-            18.5K Followers · Courtyard Stories
+            2,843 Followers · 886 Following
           </span>
         </div>
 
         {/* Facebook CTA */}
         <div className="flex flex-col items-center gap-1.5 text-center">
           <a
-            href="https://facebook.com/fooglecafe"
+            href="https://www.facebook.com/FoogleFoods/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full max-w-[260px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all hover:scale-105 shadow-md bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
           >
             <ThumbsUp className="w-3.5 h-3.5 text-white" />
-            <span>Facebook Community</span>
+            <span>Facebook @Foogle</span>
             <ExternalLink className="w-3 h-3 ml-0.5" />
           </a>
           <span className="text-[11px] text-zinc-400 font-medium">
-            99% Recommended · 14K Likes
+            1.1K Followers · Lives in Udaipur
           </span>
         </div>
       </div>

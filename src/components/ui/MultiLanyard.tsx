@@ -28,8 +28,8 @@ export interface MultiLanyardProps {
 }
 
 const CARD_SIZES = {
-  portrait: [1.6, 2.25],
-  landscape: [2.25, 1.6]
+  portrait: [1.75, 2.45],
+  landscape: [2.45, 1.75]
 };
 const THICKNESS = 0.018;
 const BEVEL = 0.007;
@@ -156,7 +156,7 @@ const buildBandGeometry = (count: number) => {
 const makeCanvasTexture = (canvas: HTMLCanvasElement, anisotropy: number) => {
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = anisotropy;
+  texture.anisotropy = Math.max(16, anisotropy);
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
   texture.magFilter = THREE.LinearFilter;
@@ -899,7 +899,8 @@ export const MultiLanyard: React.FC<MultiLanyardProps> = ({
     const resize = () => {
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // High pixel ratio for razor-sharp textures and typography on high-DPI screens
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
       renderer.setSize(view.width, view.height, false);
       frameView();
       render();

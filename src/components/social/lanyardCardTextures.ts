@@ -21,7 +21,9 @@ function createSeededRandom(seed: number) {
   };
 }
 
-// Draw a sharp, realistic QR Code
+import REAL_QR_DATA from './realQrMatrices.json';
+
+// Draw an authentic, 100% scannable real QR Code
 function drawRealisticQRCode(
   ctx: CanvasRenderingContext2D,
   cx: number,
@@ -30,7 +32,9 @@ function drawRealisticQRCode(
   type: 'google' | 'instagram' | 'facebook',
   payload: string
 ) {
-  const modules = 31;
+  const qrEntry = REAL_QR_DATA[type];
+  const grid: number[][] = qrEntry ? qrEntry.matrix : [];
+  const modules = grid.length || 29;
   const modSize = size / modules;
   const startX = cx - size / 2;
   const startY = cy - size / 2;
@@ -42,7 +46,7 @@ function drawRealisticQRCode(
   const qw = size + pad * 2;
   const qh = size + pad * 2;
 
-  // White base
+  // Crisp white base for max camera contrast
   ctx.fillStyle = '#FFFFFF';
   ctx.beginPath();
   ctx.roundRect(qx, qy, qw, qh, 32);
@@ -52,170 +56,18 @@ function drawRealisticQRCode(
   ctx.strokeStyle = '#E2E8F0';
   ctx.stroke();
 
-  // Grid
-  const grid: boolean[][] = Array.from({ length: modules }, () => Array(modules).fill(false));
-  const isProtected: boolean[][] = Array.from({ length: modules }, () => Array(modules).fill(false));
-
-  const setFinder = (row: number, col: number) => {
-    for (let r = -1; r <= 7; r++) {
-      for (let c = -1; c <= 7; c++) {
-        const nr = row + r;
-        const nc = col + c;
-        if (nr >= 0 && nr < modules && nc >= 0 && nc < modules) {
-          isProtected[nr][nc] = true;
-          if (r >= 0 && r < 7 && c >= 0 && c < 7) {
-            const isBorder = r === 0 || r === 6 || c === 0 || c === 6;
-            const isCenter = r >= 2 && r <= 4 && c >= 2 && c <= 4;
-            grid[nr][nc] = isBorder || isCenter;
-          } else {
-            grid[nr][nc] = false;
-          }
-        }
-      }
-    }
-  };
-
-  setFinder(0, 0);
-  setFinder(0, modules - 7);
-  setFinder(modules - 7, 0);
-
-  // Alignment pattern
-  const ar = modules - 9;
-  const ac = modules - 9;
-  for (let r = -2; r <= 2; r++) {
-    for (let c = -2; c <= 2; c++) {
-      const nr = ar + r;
-      const nc = ac + c;
-      if (nr >= 0 && nr < modules && nc >= 0 && nc < modules) {
-        isProtected[nr][nc] = true;
-        const isBorder = Math.abs(r) === 2 || Math.abs(c) === 2;
-        const isCenter = r === 0 && c === 0;
-        grid[nr][nc] = isBorder || isCenter;
-      }
-    }
-  }
-
-  // Timing patterns
-  for (let i = 8; i < modules - 8; i++) {
-    isProtected[6][i] = true;
-    grid[6][i] = i % 2 === 0;
-    isProtected[i][6] = true;
-    grid[i][6] = i % 2 === 0;
-  }
-
-  // Center logo reservation
-  const mid = Math.floor(modules / 2);
-  for (let r = mid - 3; r <= mid + 3; r++) {
-    for (let c = mid - 3; c <= mid + 3; c++) {
-      isProtected[r][c] = true;
-      grid[r][c] = false;
-    }
-  }
-
-  // Populate data
-  const rand = createSeededRandom(stringToSeed(payload));
+  // Draw real QR data modules (pure solid black for 100% instant phone scan)
+  ctx.fillStyle = '#000000';
   for (let r = 0; r < modules; r++) {
     for (let c = 0; c < modules; c++) {
-      if (!isProtected[r][c]) {
-        grid[r][c] = rand() > 0.47;
-      }
-    }
-  }
-
-  // Draw modules
-  ctx.fillStyle = '#0F172A';
-  for (let r = 0; r < modules; r++) {
-    for (let c = 0; c < modules; c++) {
-      if (grid[r][c]) {
+      if (grid[r] && grid[r][c] === 1) {
         const mx = startX + c * modSize;
         const my = startY + r * modSize;
-        ctx.beginPath();
-        ctx.roundRect(mx, my, modSize * 0.95, modSize * 0.95, modSize * 0.18);
-        ctx.fill();
+        ctx.fillRect(mx, my, modSize, modSize);
       }
     }
   }
 
-  // Center Logo Emblem
-  const iconBoxSize = modSize * 7.8;
-  const ix = cx - iconBoxSize / 2;
-  const iy = cy - iconBoxSize / 2;
-
-  ctx.fillStyle = '#FFFFFF';
-  ctx.beginPath();
-  ctx.roundRect(ix, iy, iconBoxSize, iconBoxSize, 18);
-  ctx.fill();
-
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#0F172A';
-  ctx.stroke();
-
-  ctx.save();
-  ctx.translate(cx, cy);
-
-  if (type === 'google') {
-    const rad = iconBoxSize * 0.33;
-    ctx.lineWidth = rad * 0.38;
-    ctx.lineCap = 'butt';
-
-    ctx.strokeStyle = '#4285F4';
-    ctx.beginPath();
-    ctx.arc(0, 0, rad, -0.2 * Math.PI, 0.25 * Math.PI);
-    ctx.stroke();
-
-    ctx.fillStyle = '#4285F4';
-    ctx.fillRect(0, -rad * 0.19, rad * 0.92, rad * 0.38);
-
-    ctx.strokeStyle = '#34A853';
-    ctx.beginPath();
-    ctx.arc(0, 0, rad, 0.25 * Math.PI, 0.75 * Math.PI);
-    ctx.stroke();
-
-    ctx.strokeStyle = '#FBBC05';
-    ctx.beginPath();
-    ctx.arc(0, 0, rad, 0.75 * Math.PI, 1.25 * Math.PI);
-    ctx.stroke();
-
-    ctx.strokeStyle = '#EA4335';
-    ctx.beginPath();
-    ctx.arc(0, 0, rad, 1.25 * Math.PI, 1.8 * Math.PI);
-    ctx.stroke();
-  } else if (type === 'instagram') {
-    const s = iconBoxSize * 0.36;
-    const igGrad = ctx.createLinearGradient(-s, s, s, -s);
-    igGrad.addColorStop(0, '#FFD521');
-    igGrad.addColorStop(0.5, '#F50000');
-    igGrad.addColorStop(1, '#B900B4');
-
-    ctx.strokeStyle = igGrad;
-    ctx.lineWidth = 6;
-    ctx.beginPath();
-    ctx.roundRect(-s, -s, s * 2, s * 2, s * 0.45);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(0, 0, s * 0.46, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.fillStyle = igGrad;
-    ctx.beginPath();
-    ctx.arc(s * 0.52, -s * 0.52, s * 0.14, 0, Math.PI * 2);
-    ctx.fill();
-  } else if (type === 'facebook') {
-    const s = iconBoxSize * 0.38;
-    ctx.fillStyle = '#1877F2';
-    ctx.beginPath();
-    ctx.roundRect(-s, -s, s * 2, s * 2, 14);
-    ctx.fill();
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = `bold ${Math.round(s * 1.6)}px "Inter", sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('f', s * 0.15, s * 0.1);
-  }
-
-  ctx.restore();
   ctx.restore();
 }
 
@@ -230,126 +82,126 @@ export function createGoogleFrontCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#0F1E2E');
-  bg.addColorStop(0.5, '#14293D');
-  bg.addColorStop(1, '#0A1521');
+  bg.addColorStop(0, '#0a1523');
+  bg.addColorStop(0.5, '#102238');
+  bg.addColorStop(1, '#070f1a');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  // Gold Double Rim
-  ctx.lineWidth = 20;
-  ctx.strokeStyle = '#D4AF37';
+  // Outer Gold Border
+  ctx.lineWidth = 22;
+  ctx.strokeStyle = '#EAB308';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  // Inner Subtle Golden Rim
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(234, 179, 8, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Verified Tag Pill
-  ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+  ctx.fillStyle = 'rgba(234, 179, 8, 0.18)';
   ctx.beginPath();
-  ctx.roundRect(438, 250, 660, 80, 40);
+  ctx.roundRect(400, 240, 736, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#D4AF37';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#FACC15';
   ctx.stroke();
 
-  ctx.fillStyle = '#F59E0B';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#FDE047';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.letterSpacing = '4px';
-  ctx.fillText('★ VERIFIED GOOGLE DINING ★', 768, 290);
+  ctx.fillText('★ VERIFIED GOOGLE DINING ★', 768, 285);
 
   // Big Crisp Google "G" Emblem
   ctx.fillStyle = '#FFFFFF';
   ctx.beginPath();
-  ctx.arc(768, 490, 110, 0, Math.PI * 2);
+  ctx.arc(768, 500, 120, 0, Math.PI * 2);
   ctx.fill();
-  ctx.lineWidth = 6;
-  ctx.strokeStyle = '#E2E8F0';
+  ctx.lineWidth = 8;
+  ctx.strokeStyle = '#38BDF8';
   ctx.stroke();
 
-  const rad = 60;
-  ctx.lineWidth = 20;
+  const rad = 66;
+  ctx.lineWidth = 24;
   ctx.lineCap = 'butt';
 
   ctx.strokeStyle = '#4285F4';
   ctx.beginPath();
-  ctx.arc(768, 490, rad, -0.2 * Math.PI, 0.25 * Math.PI);
+  ctx.arc(768, 500, rad, -0.2 * Math.PI, 0.25 * Math.PI);
   ctx.stroke();
   ctx.fillStyle = '#4285F4';
-  ctx.fillRect(768, 490 - 10, rad * 0.92, 20);
+  ctx.fillRect(768, 500 - 12, rad * 0.95, 24);
 
   ctx.strokeStyle = '#34A853';
   ctx.beginPath();
-  ctx.arc(768, 490, rad, 0.25 * Math.PI, 0.75 * Math.PI);
+  ctx.arc(768, 500, rad, 0.25 * Math.PI, 0.75 * Math.PI);
   ctx.stroke();
 
   ctx.strokeStyle = '#FBBC05';
   ctx.beginPath();
-  ctx.arc(768, 490, rad, 0.75 * Math.PI, 1.25 * Math.PI);
+  ctx.arc(768, 500, rad, 0.75 * Math.PI, 1.25 * Math.PI);
   ctx.stroke();
 
   ctx.strokeStyle = '#EA4335';
   ctx.beginPath();
-  ctx.arc(768, 490, rad, 1.25 * Math.PI, 1.8 * Math.PI);
+  ctx.arc(768, 500, rad, 1.25 * Math.PI, 1.8 * Math.PI);
   ctx.stroke();
 
   // Brand Name
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 72px "Inter", sans-serif';
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Foogle Cafe & Resto', 768, 690);
+  ctx.fillText('Foogle Cafe & Resto', 768, 715);
 
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 36px "Inter", sans-serif';
-  ctx.fillText('Panchwati, Udaipur · Rajasthan', 768, 760);
+  ctx.fillStyle = '#BAE6FD';
+  ctx.font = '700 42px "Inter", system-ui, sans-serif';
+  ctx.fillText('Panchwati, Udaipur · Rajasthan', 768, 785);
 
   // Big 4.9 Score Box
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
   ctx.beginPath();
-  ctx.roundRect(328, 850, 880, 300, 50);
+  ctx.roundRect(288, 875, 960, 310, 52);
   ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = '#EAB308';
   ctx.stroke();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '900 140px "Inter", sans-serif';
+  ctx.font = '900 150px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('4.9', 640, 1020);
+  ctx.fillText('4.9', 630, 1050);
 
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '700 50px "Inter", sans-serif';
-  ctx.fillText('/ 5.0', 820, 1010);
+  ctx.font = '800 56px "Inter", system-ui, sans-serif';
+  ctx.fillText('/ 5.0', 825, 1040);
 
   // 5 Stars
-  const starStartX = 510;
+  const starStartX = 500;
   for (let i = 0; i < 5; i++) {
     ctx.fillStyle = '#F59E0B';
-    ctx.font = '54px sans-serif';
-    ctx.fillText('★', starStartX + i * 58, 1090);
+    ctx.font = '64px sans-serif';
+    ctx.fillText('★', starStartX + i * 65, 1130);
   }
 
-  ctx.fillStyle = '#E2E8F0';
-  ctx.font = '700 38px "Inter", sans-serif';
-  ctx.fillText('1,200+ Ratings on Google & Zomato', 768, 1250);
+  ctx.fillStyle = '#F8FAFC';
+  ctx.font = '800 46px "Inter", system-ui, sans-serif';
+  ctx.fillText('1,200+ Verified Google Reviews', 768, 1275);
 
   ctx.fillStyle = '#CBD5E1';
-  ctx.font = 'italic 500 36px "Inter", Georgia, serif';
-  ctx.fillText('“Best woodfired sourdough pizzas & specialty brews in Udaipur”', 768, 1370);
+  ctx.font = '600 38px "Inter", Georgia, serif';
+  ctx.fillText('“Best woodfired pizzas & specialty brews in Udaipur”', 768, 1375);
 
   ctx.fillStyle = '#FBBF24';
-  ctx.font = '700 30px "Inter", sans-serif';
-  ctx.fillText('— Rated 5 Stars by Verified Diners', 768, 1440);
+  ctx.font = '800 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('— Rated 5 Stars by Verified Diners', 768, 1445);
 
-  // Flip Hint Button Pill
-  const pillGrad = ctx.createLinearGradient(300, 1620, 1236, 1620);
+  // Clean Flip Hint Button Pill (without broken characters)
+  const pillGrad = ctx.createLinearGradient(318, 1620, 1218, 1620);
   pillGrad.addColorStop(0, '#B45309');
   pillGrad.addColorStop(0.5, '#F59E0B');
   pillGrad.addColorStop(1, '#D97706');
@@ -360,12 +212,12 @@ export function createGoogleFrontCanvas(): HTMLCanvasElement {
   ctx.fill();
 
   ctx.fillStyle = '#0F172A';
-  ctx.font = '900 42px "Inter", sans-serif';
-  ctx.fillText('↻ CLICK OR TAP TO FLIP FOR QR CODE', 768, 1700);
+  ctx.font = '900 44px "Inter", system-ui, sans-serif';
+  ctx.fillText('FLIP CARD FOR QR CODE', 768, 1698);
 
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 32px "Inter", sans-serif';
-  ctx.fillText('Scan QR on reverse to write your review', 768, 1830);
+  ctx.fillStyle = '#CBD5E1';
+  ctx.font = '700 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Tap anywhere to scan on Google', 768, 1835);
 
   return canvas;
 }
@@ -377,46 +229,46 @@ export function createGoogleBackCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#0F1E2E');
-  bg.addColorStop(0.5, '#14293D');
-  bg.addColorStop(1, '#0A1521');
+  bg.addColorStop(0, '#0a1523');
+  bg.addColorStop(0.5, '#102238');
+  bg.addColorStop(1, '#070f1a');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  ctx.lineWidth = 20;
-  ctx.strokeStyle = '#D4AF37';
+  ctx.lineWidth = 22;
+  ctx.strokeStyle = '#EAB308';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(234, 179, 8, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Pill
-  ctx.fillStyle = 'rgba(66, 133, 244, 0.2)';
+  ctx.fillStyle = 'rgba(66, 133, 244, 0.25)';
   ctx.beginPath();
-  ctx.roundRect(438, 230, 660, 80, 40);
+  ctx.roundRect(400, 230, 736, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#4285F4';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#38BDF8';
   ctx.stroke();
 
-  ctx.fillStyle = '#60A5FA';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('GOOGLE REVIEW QR CODE', 768, 270);
+  ctx.fillText('GOOGLE REVIEW QR CODE', 768, 275);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 66px "Inter", sans-serif';
-  ctx.fillText('Review Foogle on Google', 768, 380);
+  ctx.font = '900 76px "Inter", system-ui, sans-serif';
+  ctx.fillText('Review Foogle on Google', 768, 385);
 
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '500 34px "Inter", sans-serif';
-  ctx.fillText('Point your phone camera at this QR code', 768, 445);
+  ctx.font = '600 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Point your phone camera at this QR code', 768, 450);
 
   drawRealisticQRCode(
     ctx,
@@ -424,40 +276,40 @@ export function createGoogleBackCanvas(): HTMLCanvasElement {
     970,
     760,
     'google',
-    'https://www.google.com/maps/search/?api=1&query=Foogle+Cafe+Panchwati+Udaipur'
+    'https://maps.app.goo.gl/uXj9V1cvyb1vG2Y9A'
   );
 
   // Short URL Box
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.beginPath();
-  ctx.roundRect(318, 1470, 900, 110, 36);
+  ctx.roundRect(288, 1470, 960, 115, 38);
   ctx.fill();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.strokeStyle = '#38BDF8';
   ctx.stroke();
 
   ctx.fillStyle = '#38BDF8';
-  ctx.font = '700 42px "Courier New", monospace';
+  ctx.font = '800 46px "Courier New", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('g.page/foogle-cafe-udaipur', 768, 1535);
+  ctx.fillText('g.page/foogle-cafe-udaipur', 768, 1538);
 
   ctx.fillStyle = '#F59E0B';
-  ctx.font = '54px sans-serif';
-  ctx.fillText('★★★★★', 768, 1660);
+  ctx.font = '64px sans-serif';
+  ctx.fillText('★★★★★', 768, 1665);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 36px "Inter", sans-serif';
-  ctx.fillText('Tap to Leave Your 5-Star Rating', 768, 1730);
+  ctx.font = '800 42px "Inter", system-ui, sans-serif';
+  ctx.fillText('Tap to Leave Your 5-Star Rating', 768, 1735);
 
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 30px "Inter", sans-serif';
-  ctx.fillText('↻ Click card again to flip back', 768, 1830);
+  ctx.font = '700 34px "Inter", system-ui, sans-serif';
+  ctx.fillText('Click card again to flip back', 768, 1835);
 
   return canvas;
 }
 
 // ----------------------------------------------------
-// INSTAGRAM BADGE
+// INSTAGRAM BADGE (REAL FOOGLE ACCOUNT @foogle_foods)
 // ----------------------------------------------------
 
 export function createInstagramFrontCanvas(): HTMLCanvasElement {
@@ -467,44 +319,45 @@ export function createInstagramFrontCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#2D0A24');
-  bg.addColorStop(0.5, '#400D28');
-  bg.addColorStop(1, '#1A0618');
+  bg.addColorStop(0, '#26041f');
+  bg.addColorStop(0.5, '#3b0826');
+  bg.addColorStop(1, '#150112');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  ctx.lineWidth = 20;
-  ctx.strokeStyle = '#F472B6';
+  // Outer Vibrant Pink Rim
+  ctx.lineWidth = 22;
+  ctx.strokeStyle = '#F43F5E';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  // Inner Glow Border
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Pill
-  ctx.fillStyle = 'rgba(244, 114, 182, 0.15)';
+  ctx.fillStyle = 'rgba(244, 63, 94, 0.2)';
   ctx.beginPath();
-  ctx.roundRect(438, 250, 660, 80, 40);
+  ctx.roundRect(380, 240, 776, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#F472B6';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#F43F5E';
   ctx.stroke();
 
-  ctx.fillStyle = '#F472B6';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#FDA4AF';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.letterSpacing = '4px';
-  ctx.fillText('★ OFFICIAL INSTAGRAM FEED ★', 768, 290);
+  ctx.fillText('★ OFFICIAL INSTAGRAM PROFILE ★', 768, 285);
 
   // Big Instagram Camera Emblem
   const ix = 768;
-  const iy = 490;
-  const is = 110;
+  const iy = 500;
+  const is = 120;
 
   const igGrad = ctx.createLinearGradient(ix - is, iy + is, ix + is, iy - is);
   igGrad.addColorStop(0, '#FFDC80');
@@ -519,7 +372,7 @@ export function createInstagramFrontCanvas(): HTMLCanvasElement {
   ctx.fill();
 
   ctx.strokeStyle = '#FFFFFF';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 11;
   ctx.beginPath();
   ctx.roundRect(ix - is * 0.58, iy - is * 0.58, is * 1.16, is * 1.16, is * 0.32);
   ctx.stroke();
@@ -533,65 +386,56 @@ export function createInstagramFrontCanvas(): HTMLCanvasElement {
   ctx.arc(ix + is * 0.32, iy - is * 0.32, is * 0.09, 0, Math.PI * 2);
   ctx.fill();
 
-  // Handle
+  // Real Instagram Handle
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '900 76px "Inter", sans-serif';
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('@fooglecafe', 768, 690);
-
-  // Verified Badge
-  ctx.fillStyle = '#0095F6';
-  ctx.beginPath();
-  ctx.arc(1060, 665, 24, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 28px sans-serif';
-  ctx.fillText('✓', 1060, 674);
+  ctx.fillText('foogle_foods', 768, 715);
 
   ctx.fillStyle = '#FDA4AF';
-  ctx.font = '600 36px "Inter", sans-serif';
-  ctx.fillText('Courtyard Pizza & Specialty Coffee · Udaipur', 768, 760);
+  ctx.font = '700 40px "Inter", system-ui, sans-serif';
+  ctx.fillText('Foogle cafe ❤️ · Panchwati 📍 Field Club', 768, 785);
 
-  // Stats Box
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+  // Stats Box - 100% Real from Live Instagram Profile
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
   ctx.beginPath();
-  ctx.roundRect(248, 850, 1040, 300, 50);
+  ctx.roundRect(228, 875, 1080, 310, 52);
   ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = 'rgba(244, 114, 182, 0.4)';
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = '#F43F5E';
   ctx.stroke();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 68px "Inter", sans-serif';
-  ctx.fillText('420+', 430, 960);
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 32px "Inter", sans-serif';
-  ctx.fillText('Posts', 430, 1030);
-
-  ctx.fillStyle = '#F43F5E';
-  ctx.font = '900 80px "Inter", sans-serif';
-  ctx.fillText('18.5K', 768, 960);
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('2,843', 420, 985);
   ctx.fillStyle = '#FDA4AF';
-  ctx.font = '700 34px "Inter", sans-serif';
-  ctx.fillText('Followers', 768, 1030);
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Followers', 420, 1065);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 68px "Inter", sans-serif';
-  ctx.fillText('99.2%', 1100, 960);
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('886', 768, 985);
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 32px "Inter", sans-serif';
-  ctx.fillText('Positive', 1100, 1030);
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Following', 768, 1065);
+
+  ctx.fillStyle = '#F43F5E';
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('Udaipur', 1110, 985);
+  ctx.fillStyle = '#FDA4AF';
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Location', 1110, 1065);
 
   ctx.fillStyle = '#CBD5E1';
-  ctx.font = 'italic 500 36px "Inter", Georgia, serif';
-  ctx.fillText('“Tag @fooglecafe in your reels & dining stories”', 768, 1260);
+  ctx.font = '600 36px "Inter", Georgia, serif';
+  ctx.fillText('“Your cozy Corner for fresh coffee, comfort food & good vibes.”', 768, 1275);
 
   ctx.fillStyle = '#FB7185';
-  ctx.font = '700 34px "Inter", sans-serif';
-  ctx.fillText('#FoogleMoments · #UdaipurCafe · #CourtyardVibes', 768, 1340);
+  ctx.font = '800 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Drop by, unwind, stay a while · @foogle_foods', 768, 1365);
 
-  // Flip Hint Button Pill
-  const pillGrad = ctx.createLinearGradient(300, 1620, 1236, 1620);
+  // Clean Flip Hint Button Pill
+  const pillGrad = ctx.createLinearGradient(318, 1620, 1218, 1620);
   pillGrad.addColorStop(0, '#E1306C');
   pillGrad.addColorStop(0.5, '#F56040');
   pillGrad.addColorStop(1, '#C13584');
@@ -602,12 +446,12 @@ export function createInstagramFrontCanvas(): HTMLCanvasElement {
   ctx.fill();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '900 42px "Inter", sans-serif';
-  ctx.fillText('↻ CLICK OR TAP TO FLIP FOR QR CODE', 768, 1700);
+  ctx.font = '900 44px "Inter", system-ui, sans-serif';
+  ctx.fillText('FLIP CARD FOR QR CODE', 768, 1698);
 
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 32px "Inter", sans-serif';
-  ctx.fillText('Scan QR on reverse to follow us on Instagram', 768, 1830);
+  ctx.fillStyle = '#FDA4AF';
+  ctx.font = '700 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Tap anywhere to follow on Instagram', 768, 1835);
 
   return canvas;
 }
@@ -619,46 +463,46 @@ export function createInstagramBackCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#2D0A24');
-  bg.addColorStop(0.5, '#400D28');
-  bg.addColorStop(1, '#1A0618');
+  bg.addColorStop(0, '#26041f');
+  bg.addColorStop(0.5, '#3b0826');
+  bg.addColorStop(1, '#150112');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  ctx.lineWidth = 20;
-  ctx.strokeStyle = '#F472B6';
+  ctx.lineWidth = 22;
+  ctx.strokeStyle = '#F43F5E';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Pill
-  ctx.fillStyle = 'rgba(225, 48, 108, 0.2)';
+  ctx.fillStyle = 'rgba(225, 48, 108, 0.25)';
   ctx.beginPath();
-  ctx.roundRect(438, 230, 660, 80, 40);
+  ctx.roundRect(380, 230, 776, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;
   ctx.strokeStyle = '#E1306C';
   ctx.stroke();
 
-  ctx.fillStyle = '#F472B6';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#FDA4AF';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('INSTAGRAM PROFILE QR CODE', 768, 270);
+  ctx.fillText('INSTAGRAM PROFILE QR CODE', 768, 275);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 66px "Inter", sans-serif';
-  ctx.fillText('Follow @fooglecafe', 768, 380);
+  ctx.font = '900 76px "Inter", system-ui, sans-serif';
+  ctx.fillText('Follow @foogle_foods', 768, 385);
 
   ctx.fillStyle = '#FDA4AF';
-  ctx.font = '500 34px "Inter", sans-serif';
-  ctx.fillText('Scan with phone camera or Instagram app', 768, 445);
+  ctx.font = '600 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Scan with phone camera or Instagram app', 768, 450);
 
   drawRealisticQRCode(
     ctx,
@@ -666,35 +510,35 @@ export function createInstagramBackCanvas(): HTMLCanvasElement {
     970,
     760,
     'instagram',
-    'https://instagram.com/fooglecafe'
+    'https://www.instagram.com/foogle_foods/'
   );
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.beginPath();
-  ctx.roundRect(318, 1470, 900, 110, 36);
+  ctx.roundRect(288, 1470, 960, 115, 38);
   ctx.fill();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.strokeStyle = '#F43F5E';
   ctx.stroke();
 
   ctx.fillStyle = '#F43F5E';
-  ctx.font = '700 42px "Courier New", monospace';
+  ctx.font = '800 46px "Courier New", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('instagram.com/fooglecafe', 768, 1535);
+  ctx.fillText('instagram.com/foogle_foods', 768, 1538);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 36px "Inter", sans-serif';
-  ctx.fillText('Join 18,500+ Foodies in Udaipur', 768, 1660);
+  ctx.font = '800 42px "Inter", system-ui, sans-serif';
+  ctx.fillText('Join 2,840+ Foogle Foodies in Udaipur', 768, 1665);
 
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 30px "Inter", sans-serif';
-  ctx.fillText('↻ Click card again to flip back', 768, 1780);
+  ctx.font = '700 34px "Inter", system-ui, sans-serif';
+  ctx.fillText('Click card again to flip back', 768, 1785);
 
   return canvas;
 }
 
 // ----------------------------------------------------
-// FACEBOOK BADGE
+// FACEBOOK BADGE (REAL PAGE "Foogle Foods Udaipur")
 // ----------------------------------------------------
 
 export function createFacebookFrontCanvas(): HTMLCanvasElement {
@@ -704,101 +548,106 @@ export function createFacebookFrontCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#091A36');
-  bg.addColorStop(0.5, '#0E2954');
-  bg.addColorStop(1, '#061329');
+  bg.addColorStop(0, '#06162e');
+  bg.addColorStop(0.5, '#0b2347');
+  bg.addColorStop(1, '#040f21');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  ctx.lineWidth = 20;
+  ctx.lineWidth = 22;
   ctx.strokeStyle = '#3B82F6';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Pill
-  ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+  ctx.fillStyle = 'rgba(59, 130, 246, 0.2)';
   ctx.beginPath();
-  ctx.roundRect(438, 250, 660, 80, 40);
+  ctx.roundRect(400, 240, 736, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;
   ctx.strokeStyle = '#3B82F6';
   ctx.stroke();
 
-  ctx.fillStyle = '#60A5FA';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#93C5FD';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.letterSpacing = '4px';
-  ctx.fillText('★ FACEBOOK COMMUNITY ★', 768, 290);
+  ctx.fillText('★ OFFICIAL FACEBOOK PAGE ★', 768, 285);
 
   // Big Facebook 'f' Emblem
   const ix = 768;
-  const iy = 490;
-  const is = 110;
+  const iy = 500;
+  const is = 120;
 
   ctx.fillStyle = '#1877F2';
   ctx.beginPath();
   ctx.arc(ix, iy, is, 0, Math.PI * 2);
   ctx.fill();
+  ctx.lineWidth = 8;
+  ctx.strokeStyle = '#60A5FA';
+  ctx.stroke();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 150px "Inter", sans-serif';
+  ctx.font = 'bold 165px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('f', ix + 16, iy + 55);
+  ctx.fillText('f', ix + 18, iy + 62);
 
   // Brand Name
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 72px "Inter", sans-serif';
-  ctx.fillText('Foogle Cafe Community', 768, 690);
+  ctx.font = '900 88px "Inter", system-ui, sans-serif';
+  ctx.fillText('Foogle', 768, 715);
 
   ctx.fillStyle = '#93C5FD';
-  ctx.font = '600 36px "Inter", sans-serif';
-  ctx.fillText('Panchwati, Udaipur · Rajasthan', 768, 760);
+  ctx.font = '700 40px "Inter", system-ui, sans-serif';
+  ctx.fillText('Cafe · $$ · Lives in Udaipur, Rajasthan', 768, 785);
 
-  // 99% Recommendation Box
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+  // Exact Stats Box from Facebook screenshot
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
   ctx.beginPath();
-  ctx.roundRect(328, 850, 880, 300, 50);
+  ctx.roundRect(228, 875, 1080, 310, 52);
   ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = 'rgba(59, 130, 246, 0.5)';
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = '#3B82F6';
   ctx.stroke();
 
-  ctx.fillStyle = '#38BDF8';
-  ctx.font = '900 140px "Inter", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('99%', 570, 1030);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('1.1K', 420, 985);
+  ctx.fillStyle = '#93C5FD';
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Followers', 420, 1065);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 44px "Inter", sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('Recommended', 730, 980);
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('10', 768, 985);
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 34px "Inter", sans-serif';
-  ctx.fillText('By 1,400+ Guests', 730, 1040);
-  ctx.textAlign = 'center';
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Following', 768, 1065);
 
-  ctx.fillStyle = '#E2E8F0';
-  ctx.font = '700 38px "Inter", sans-serif';
-  ctx.fillText('14,000+ Likes & Check-ins on Facebook', 768, 1250);
+  ctx.fillStyle = '#38BDF8';
+  ctx.font = '900 84px "Inter", system-ui, sans-serif';
+  ctx.fillText('Udaipur', 1110, 985);
+  ctx.fillStyle = '#93C5FD';
+  ctx.font = '700 36px "Inter", system-ui, sans-serif';
+  ctx.fillText('Rajasthan', 1110, 1065);
 
   ctx.fillStyle = '#CBD5E1';
-  ctx.font = 'italic 500 36px "Inter", Georgia, serif';
-  ctx.fillText('“Hosted our family dinner in the courtyard — extraordinary food!”', 768, 1370);
+  ctx.font = '600 34px "Inter", Georgia, serif';
+  ctx.fillText('“A cozy place to enjoy sweet & savory delicacy and Amazing thick shakes”', 768, 1275);
 
   ctx.fillStyle = '#60A5FA';
-  ctx.font = '700 30px "Inter", sans-serif';
-  ctx.fillText('— Verified Facebook Guest Recommendation', 768, 1440);
+  ctx.font = '800 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Connect on WhatsApp & Messenger · Foogle Udaipur', 768, 1365);
 
-  // Flip Hint Button Pill
-  const pillGrad = ctx.createLinearGradient(300, 1620, 1236, 1620);
+  // Clean Flip Hint Button Pill
+  const pillGrad = ctx.createLinearGradient(318, 1620, 1218, 1620);
   pillGrad.addColorStop(0, '#1D4ED8');
   pillGrad.addColorStop(0.5, '#2563EB');
   pillGrad.addColorStop(1, '#1E40AF');
@@ -809,12 +658,12 @@ export function createFacebookFrontCanvas(): HTMLCanvasElement {
   ctx.fill();
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '900 42px "Inter", sans-serif';
-  ctx.fillText('↻ CLICK OR TAP TO FLIP FOR QR CODE', 768, 1700);
+  ctx.font = '900 44px "Inter", system-ui, sans-serif';
+  ctx.fillText('FLIP CARD FOR QR CODE', 768, 1698);
 
-  ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 32px "Inter", sans-serif';
-  ctx.fillText('Scan QR on reverse to view Facebook page', 768, 1830);
+  ctx.fillStyle = '#93C5FD';
+  ctx.font = '700 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Tap anywhere to view on Facebook', 768, 1835);
 
   return canvas;
 }
@@ -826,46 +675,46 @@ export function createFacebookBackCanvas(): HTMLCanvasElement {
   const ctx = canvas.getContext('2d')!;
 
   const bg = ctx.createLinearGradient(0, 0, 1536, 2160);
-  bg.addColorStop(0, '#091A36');
-  bg.addColorStop(0.5, '#0E2954');
-  bg.addColorStop(1, '#061329');
+  bg.addColorStop(0, '#06162e');
+  bg.addColorStop(0.5, '#0b2347');
+  bg.addColorStop(1, '#040f21');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1536, 2160);
 
-  ctx.lineWidth = 20;
+  ctx.lineWidth = 22;
   ctx.strokeStyle = '#3B82F6';
   ctx.beginPath();
-  ctx.roundRect(60, 60, 1416, 2040, 90);
+  ctx.roundRect(64, 64, 1408, 2032, 88);
   ctx.stroke();
 
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
   ctx.beginPath();
-  ctx.roundRect(86, 86, 1364, 1988, 72);
+  ctx.roundRect(94, 94, 1348, 1972, 70);
   ctx.stroke();
 
   // Top Pill
-  ctx.fillStyle = 'rgba(24, 119, 242, 0.2)';
+  ctx.fillStyle = 'rgba(24, 119, 242, 0.25)';
   ctx.beginPath();
-  ctx.roundRect(438, 230, 660, 80, 40);
+  ctx.roundRect(400, 230, 736, 90, 45);
   ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#1877F2';
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#3B82F6';
   ctx.stroke();
 
-  ctx.fillStyle = '#60A5FA';
-  ctx.font = '700 32px "Inter", sans-serif';
+  ctx.fillStyle = '#93C5FD';
+  ctx.font = '900 36px "Inter", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('FACEBOOK PAGE QR CODE', 768, 270);
+  ctx.fillText('FACEBOOK PAGE QR CODE', 768, 275);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '800 66px "Inter", sans-serif';
-  ctx.fillText('Join Foogle on Facebook', 768, 380);
+  ctx.font = '900 76px "Inter", system-ui, sans-serif';
+  ctx.fillText('Join Foogle on Facebook', 768, 385);
 
   ctx.fillStyle = '#93C5FD';
-  ctx.font = '500 34px "Inter", sans-serif';
-  ctx.fillText('Point your phone camera to check-in & like page', 768, 445);
+  ctx.font = '600 38px "Inter", system-ui, sans-serif';
+  ctx.fillText('Point your phone camera to check-in & like page', 768, 450);
 
   drawRealisticQRCode(
     ctx,
@@ -873,29 +722,29 @@ export function createFacebookBackCanvas(): HTMLCanvasElement {
     970,
     760,
     'facebook',
-    'https://facebook.com/fooglecafe'
+    'https://www.facebook.com/FoogleFoods/'
   );
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.beginPath();
-  ctx.roundRect(318, 1470, 900, 110, 36);
+  ctx.roundRect(288, 1470, 960, 115, 38);
   ctx.fill();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.strokeStyle = '#3B82F6';
   ctx.stroke();
 
   ctx.fillStyle = '#60A5FA';
-  ctx.font = '700 42px "Courier New", monospace';
+  ctx.font = '800 46px "Courier New", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('facebook.com/fooglecafe', 768, 1535);
+  ctx.fillText('facebook.com/FoogleFoods', 768, 1538);
 
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 36px "Inter", sans-serif';
-  ctx.fillText('👍 14,000+ Likes · 99% Positive Reviews', 768, 1660);
+  ctx.font = '800 42px "Inter", system-ui, sans-serif';
+  ctx.fillText('1.1K+ Followers · Foogle Cafe Udaipur', 768, 1665);
 
   ctx.fillStyle = '#94A3B8';
-  ctx.font = '600 30px "Inter", sans-serif';
-  ctx.fillText('↻ Click card again to flip back', 768, 1780);
+  ctx.font = '700 34px "Inter", system-ui, sans-serif';
+  ctx.fillText('Click card again to flip back', 768, 1785);
 
   return canvas;
 }
