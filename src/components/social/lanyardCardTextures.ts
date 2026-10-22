@@ -188,17 +188,17 @@ export function createGoogleFrontCanvas(): HTMLCanvasElement {
     ctx.fillText('★', starStartX + i * 65, 1130);
   }
 
-  ctx.fillStyle = '#F8FAFC';
-  ctx.font = '800 46px "Inter", system-ui, sans-serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '900 52px "Inter", system-ui, sans-serif';
   ctx.fillText('1,200+ Verified Google Reviews', 768, 1275);
 
-  ctx.fillStyle = '#CBD5E1';
-  ctx.font = '600 38px "Inter", Georgia, serif';
+  ctx.fillStyle = '#E2E8F0';
+  ctx.font = '700 44px "Inter", system-ui, sans-serif';
   ctx.fillText('“Best woodfired pizzas & specialty brews in Udaipur”', 768, 1375);
 
   ctx.fillStyle = '#FBBF24';
-  ctx.font = '800 36px "Inter", system-ui, sans-serif';
-  ctx.fillText('— Rated 5 Stars by Verified Diners', 768, 1445);
+  ctx.font = '800 40px "Inter", system-ui, sans-serif';
+  ctx.fillText('— Rated 5 Stars by Verified Diners', 768, 1450);
 
   // Clean Flip Hint Button Pill (without broken characters)
   const pillGrad = ctx.createLinearGradient(318, 1620, 1218, 1620);
@@ -426,12 +426,12 @@ export function createInstagramFrontCanvas(): HTMLCanvasElement {
   ctx.font = '700 36px "Inter", system-ui, sans-serif';
   ctx.fillText('Location', 1110, 1065);
 
-  ctx.fillStyle = '#CBD5E1';
-  ctx.font = '600 36px "Inter", Georgia, serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '700 42px "Inter", system-ui, sans-serif';
   ctx.fillText('“Your cozy Corner for fresh coffee, comfort food & good vibes.”', 768, 1275);
 
   ctx.fillStyle = '#FB7185';
-  ctx.font = '800 38px "Inter", system-ui, sans-serif';
+  ctx.font = '800 42px "Inter", system-ui, sans-serif';
   ctx.fillText('Drop by, unwind, stay a while · @foogle_foods', 768, 1365);
 
   // Clean Flip Hint Button Pill
@@ -638,12 +638,12 @@ export function createFacebookFrontCanvas(): HTMLCanvasElement {
   ctx.font = '700 36px "Inter", system-ui, sans-serif';
   ctx.fillText('Rajasthan', 1110, 1065);
 
-  ctx.fillStyle = '#CBD5E1';
-  ctx.font = '600 34px "Inter", Georgia, serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '700 42px "Inter", system-ui, sans-serif';
   ctx.fillText('“A cozy place to enjoy sweet & savory delicacy and Amazing thick shakes”', 768, 1275);
 
   ctx.fillStyle = '#60A5FA';
-  ctx.font = '800 38px "Inter", system-ui, sans-serif';
+  ctx.font = '800 42px "Inter", system-ui, sans-serif';
   ctx.fillText('Connect on WhatsApp & Messenger · Foogle Udaipur', 768, 1365);
 
   // Clean Flip Hint Button Pill

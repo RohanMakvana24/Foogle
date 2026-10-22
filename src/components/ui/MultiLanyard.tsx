@@ -160,6 +160,8 @@ const makeCanvasTexture = (canvas: HTMLCanvasElement, anisotropy: number) => {
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
   texture.magFilter = THREE.LinearFilter;
+  // Negative mipmap bias keeps high-res details super crisp at any angle
+  (texture as any).mipMapBias = -0.5;
   texture.needsUpdate = true;
   return texture;
 };
@@ -631,7 +633,7 @@ export const MultiLanyard: React.FC<MultiLanyardProps> = ({
 
     const frameView = () => {
       const aspect = view.width / view.height;
-      const viewHeight = layout.height / 0.52;
+      const viewHeight = layout.height / 0.62;
       const viewWidth = viewHeight * aspect;
 
       camera.aspect = aspect;
@@ -900,7 +902,7 @@ export const MultiLanyard: React.FC<MultiLanyardProps> = ({
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
       // High pixel ratio for razor-sharp textures and typography on high-DPI screens
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3));
       renderer.setSize(view.width, view.height, false);
       frameView();
       render();

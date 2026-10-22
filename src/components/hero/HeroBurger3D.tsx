@@ -1,5 +1,5 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
@@ -10,7 +10,9 @@ interface BurgerMeshProps {
 
 function BurgerMesh({ onLoaded }: BurgerMeshProps) {
   const [model, setModel] = useState<THREE.Group | null>(null);
+  const [modelSize, setModelSize] = useState<THREE.Vector3 | null>(null);
   const groupRef = useRef<THREE.Group>(null);
+  const { viewport } = useThree();
 
   useEffect(() => {
     const textureLoader = new THREE.TextureLoader();
@@ -63,9 +65,9 @@ function BurgerMesh({ onLoaded }: BurgerMeshProps) {
         metalness: 0.02,
       }),
       cheese: new THREE.MeshStandardMaterial({
-        color: new THREE.Color('#FFB703'),
-        roughness: 0.3,
-        metalness: 0.05,
+        color: new THREE.Color('#E8940C'),
+        roughness: 0.45,
+        metalness: 0.0,
       }),
       tomato: new THREE.MeshStandardMaterial({
         map: tomatoColor,
@@ -128,15 +130,10 @@ function BurgerMesh({ onLoaded }: BurgerMeshProps) {
       obj.position.y = -center.y;
       obj.position.z = -center.z;
 
-      // Perfectly scaled to frame
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const targetSize = 2.45;
-      const scale = targetSize / (maxDim || 1);
-      obj.scale.set(scale, scale, scale);
-
       const wrapper = new THREE.Group();
       wrapper.add(obj);
       setModel(wrapper);
+      setModelSize(size.clone());
       if (onLoaded) onLoaded();
     });
   }, [onLoaded]);
@@ -148,11 +145,22 @@ function BurgerMesh({ onLoaded }: BurgerMeshProps) {
     }
   });
 
-  if (!model) return null;
+  if (!model || !modelSize) return null;
+
+  // Fit the burger inside the stage on every screen size. The model is much
+  // wider/deeper than it is tall, so we fit its rotating footprint to the
+  // viewport width and keep a little breathing room around it.
+  const footprint = Math.max(modelSize.x, modelSize.z) || 1;
+  const fitScale = Math.min(
+    (viewport.width * 0.68) / footprint,
+    (viewport.height * 0.58) / (modelSize.y || 1)
+  );
 
   return (
-    <group ref={groupRef} rotation={[0.2, 0.35, 0]}>
-      <primitive object={model} />
+    <group ref={groupRef} rotation={[0.02, 0.45, 0]}>
+      <group scale={fitScale}>
+        <primitive object={model} />
+      </group>
     </group>
   );
 }
@@ -170,7 +178,7 @@ export const HeroBurger3D: React.FC<HeroBurger3DProps> = ({ onLoaded }) => {
   };
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[480px] lg:h-[540px] xl:h-[580px] flex items-center justify-center select-none">
+    <div className="relative w-full h-[520px] sm:h-[580px] lg:h-[640px] flex items-center justify-center select-none overflow-visible">
       {/* Loading state indicator */}
       {!isLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-amber-400 z-10">
@@ -184,35 +192,35 @@ export const HeroBurger3D: React.FC<HeroBurger3DProps> = ({ onLoaded }) => {
       {/* 3D Canvas */}
       <Canvas
         shadows
-        camera={{ position: [0, 0.3, 3.8], fov: 42 }}
+        camera={{ position: [0, 0, 3.8], fov: 38 }}
         gl={{ antialias: true, alpha: true }}
         className={`w-full h-full cursor-grab active:cursor-grabbing transition-opacity duration-700 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <ambientLight intensity={1.1} />
+        <ambientLight intensity={1.3} />
         <directionalLight
-          position={[5, 7, 5]}
-          intensity={2.4}
+          position={[5, 6, 5]}
+          intensity={2.8}
           castShadow
           shadow-mapSize={[1024, 1024]}
         />
-        <directionalLight position={[-4, 3, -2]} intensity={1.1} color="#FF9F80" />
-        <directionalLight position={[0, -3, 3]} intensity={0.6} color="#FFE6A7" />
-        <pointLight position={[0, 4, 1.5]} intensity={1.5} color="#FFF8E7" />
+        <directionalLight position={[-4, 2, -2]} intensity={1.4} color="#FF9F80" />
+        <directionalLight position={[0, -2, 3]} intensity={0.9} color="#FFE6A7" />
+        <pointLight position={[0, 3, 2]} intensity={2.0} color="#FFF8E7" />
 
-        <Float speed={2} rotationIntensity={0.2} floatIntensity={0.35}>
+        <Float speed={1.8} rotationIntensity={0.12} floatIntensity={0.2}>
           <Suspense fallback={null}>
             <BurgerMesh onLoaded={handleLoaded} />
           </Suspense>
         </Float>
 
         <ContactShadows
-          position={[0, -1.25, 0]}
-          opacity={0.6}
-          scale={5}
-          blur={2.4}
-          far={3}
+          position={[0, -0.68, 0]}
+          opacity={0.45}
+          scale={4}
+          blur={2.6}
+          far={1.4}
           color="#000000"
         />
 

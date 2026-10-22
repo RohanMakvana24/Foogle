@@ -272,6 +272,35 @@ body {
   animation: subtleFloat 4s ease-in-out infinite;
 }
 
+/* Hero Stage Motion: orbit ring + breathing spotlight */
+@keyframes heroOrbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heroHaloPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-hero-orbit {
+  animation: heroOrbitSpin 52s linear infinite;
+}
+
+.animate-hero-halo {
+  animation: heroHaloPulse 7s ease-in-out infinite;
+}
+
 /* Stagger utility delays */
 .animation-delay-100 {
   animation-delay: 100ms;
