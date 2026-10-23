@@ -1,52 +1,25 @@
 import React, { useState } from 'react';
-import {
-  ContainerAnimated,
-  ContainerScroll,
-  ContainerStagger,
-  ContainerSticky,
-  GalleryCol,
-  GalleryContainer,
-} from '@/components/ui/animated-gallery';
+import ThreeDParallaxUnfurlingGallery from '@/components/ui/3d-parallax-unfurling-gallery';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { GalleryLightbox } from './GalleryLightbox';
 import { GALLERY_ITEMS } from '../../data/galleryData';
 import { GalleryItem } from '../../types/gallery';
-import { buildSrcSet, buildAvifSrcSet } from '../../lib/imageSrcSet';
-import { Sparkles, Camera, MapPin, Utensils, Maximize2, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-
-// Clean curated Foogle food photography
-const IMAGES_1 = [
-  '/images/photos/woodfired-pizza.webp',
-  '/images/photos/garlic-bread.webp',
-  '/images/photos/cold-coffee.webp',
-  '/images/photos/aloo-tikki-burger.webp',
-];
-
-const IMAGES_2 = [
-  '/images/photos/paneer-tabasco-pizza.webp',
-  '/images/photos/pink-sauce-pasta.webp',
-  '/images/photos/sizzling-brownie.webp',
-  '/images/photos/nachos.webp',
-];
-
-const IMAGES_3 = [
-  '/images/photos/nutella-waffle.webp',
-  '/images/photos/white-penne-pasta.webp',
-  '/images/photos/blue-lagoon-mojito.webp',
-  '/images/photos/pav-bhaji.webp',
-];
+import { Sparkles, Camera, MapPin, MousePointerClick, Utensils } from 'lucide-react';
 
 export const GallerySection: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
-  const handleImageClick = (src: string) => {
-    const matched = GALLERY_ITEMS.find((item) => item.imageUrl === src);
+  // Extract all high-res photography URLs from verified menu items
+  const galleryImageUrls = GALLERY_ITEMS.map((item) => item.imageUrl || '');
+
+  const handleImageClick = (src: string, index: number) => {
+    const matched = GALLERY_ITEMS.find((item) => item.imageUrl === src) || GALLERY_ITEMS[index % GALLERY_ITEMS.length];
     if (matched) {
       setSelectedItem(matched);
     } else {
       setSelectedItem({
-        id: 'gallery-custom',
+        id: `gallery-item-${index}`,
         title: 'Foogle Cafe Creation',
         subtitle: 'Prepared fresh with premium ingredients at Panchwati, Udaipur',
         category: 'Pizza',
@@ -60,44 +33,6 @@ export const GallerySection: React.FC = () => {
     }
   };
 
-  const renderCard = (src: string, index: number, alt: string = 'Foogle Specialty') => (
-    <div
-      key={`${src}-${index}`}
-      onClick={() => handleImageClick(src)}
-      className="group relative w-full aspect-[4/3] sm:aspect-[16/10] cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl border border-black/10 dark:border-white/10 transition-all duration-300 hover:scale-[1.03] shadow-md hover:shadow-2xl"
-      style={{
-        backgroundColor: 'var(--color-bg-surface)',
-      }}
-    >
-      <picture className="contents">
-        <source
-          type="image/avif"
-          srcSet={buildAvifSrcSet(src)}
-          sizes="(max-width: 640px) 33vw, 420px"
-        />
-        <img
-          src={src}
-          srcSet={buildSrcSet(src)}
-          sizes="(max-width: 640px) 33vw, 420px"
-          alt={alt}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </picture>
-
-      {/* Hover reveal overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-2.5 sm:p-3 pointer-events-none">
-        <span className="text-[10px] sm:text-xs font-semibold text-white drop-shadow-sm truncate">
-          View Detail
-        </span>
-        <div className="p-1 sm:p-1.5 rounded-full bg-white/20 backdrop-blur-md text-white">
-          <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <section
       id="gallery"
@@ -107,77 +42,50 @@ export const GallerySection: React.FC = () => {
         backgroundColor: 'var(--color-bg-page)',
       }}
     >
-      {/* Editorial Header Section */}
-      <div className="pt-16 pb-4 sm:pt-20 sm:pb-6 relative z-20">
-        <ContainerStagger className="text-center max-w-3xl mx-auto px-4 flex flex-col items-center">
-          <ContainerAnimated>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 mb-3">
-              <Utensils className="w-3.5 h-3.5 text-amber-500" />
-              <span>GENUINE FOOGLE MENU &amp; MOMENTS</span>
+      {/* Editorial Section Intro */}
+      <div className="pt-16 pb-10 sm:pt-20 sm:pb-12">
+        <Container>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+              <SectionHeading
+                eyebrow="GENUINE FOOGLE MENU &amp; MOMENTS"
+                title="Good Food, Good Moments"
+                description="Explore real culinary creations straight from Foogle's kitchen in Panchwati, Udaipur — authentic woodfired pizzas, loaded pastas, crispy snacks, decadent waffles, and specialty shakes crafted fresh daily."
+                titleLevel="h2"
+              />
             </div>
-          </ContainerAnimated>
 
-          <ContainerAnimated>
-            <h2
-              id="gallery-main-heading"
-              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
-            >
-              Good Food,{' '}
-              <span className="font-serif italic text-amber-600 dark:text-amber-400">
-                Good Moments
+            {/* Feature Badges */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300">
+                <Utensils className="w-3.5 h-3.5 text-emerald-500" />
+                Real Menu Dishes
               </span>
-            </h2>
-          </ContainerAnimated>
-
-          <ContainerAnimated className="my-2.5 sm:my-3">
-            <p className="text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-xl">
-              Authentic woodfired pizzas, loaded pastas, decadent waffles, and artisanal coolers crafted fresh daily in Panchwati, Udaipur.
-            </p>
-          </ContainerAnimated>
-
-          <ContainerAnimated className="flex items-center justify-center gap-3">
-            <a href="#menu">
-              <Button className="gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md">
-                Explore Full Menu <ArrowRight className="w-4 h-4" />
-              </Button>
-            </a>
-            <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium px-3 py-1.5 rounded-full border border-black/5 dark:border-white/10">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Scroll down to tilt 3D gallery
-            </span>
-          </ContainerAnimated>
-        </ContainerStagger>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                Atmosphere &amp; Moments
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-400">
+                <MousePointerClick className="w-3.5 h-3.5" />
+                Scroll To Explore
+              </span>
+            </div>
+          </div>
+        </Container>
       </div>
 
-      {/* 
-        3D ContainerScroll (h-[260vh]):
-        Starts as a 3D floor plane in perspective, tilts upright as user scrolls into view!
-      */}
-      <ContainerScroll className="relative h-[250vh] sm:h-[270vh]">
-        <ContainerSticky className="h-[calc(100vh-72px)] top-[72px] flex items-center justify-center px-3 sm:px-6 md:px-8">
-          <div className="w-full max-w-6xl mx-auto py-2">
-            <GalleryContainer className="w-full max-h-[82vh]">
-              {/* Column 1 */}
-              <GalleryCol yRange={['-12%', '4%']} className="-mt-3">
-                {IMAGES_1.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
-              </GalleryCol>
-
-              {/* Column 2 (Offset center with opposing parallax like demo) */}
-              <GalleryCol className="mt-[-28%] sm:mt-[-35%]" yRange={['16%', '0%']}>
-                {IMAGES_2.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
-              </GalleryCol>
-
-              {/* Column 3 */}
-              <GalleryCol yRange={['-12%', '4%']} className="-mt-3">
-                {IMAGES_3.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
-              </GalleryCol>
-            </GalleryContainer>
-          </div>
-        </ContainerSticky>
-      </ContainerScroll>
+      {/* 3D Parallax Unfurling Gallery (Window scroll linked) */}
+      <div className="w-full relative">
+        <ThreeDParallaxUnfurlingGallery
+          images={galleryImageUrls}
+          useWindowScroll={true}
+          heightClass="h-[380vh] sm:h-[440vh] md:h-[500vh]"
+          onImageClick={handleImageClick}
+        />
+      </div>
 
       {/* Verified Dishes Showcase Info Card */}
-      <div className="py-8 relative z-10">
+      <div className="py-8">
         <Container>
           <div
             className="p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs shadow-xs"
