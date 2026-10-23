@@ -15,7 +15,7 @@ import { buildSrcSet, buildAvifSrcSet } from '../../lib/imageSrcSet';
 import { Sparkles, Camera, MapPin, Utensils, Maximize2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Curated 4 items per column as in demo
+// Clean curated Foogle food photography
 const IMAGES_1 = [
   '/images/photos/woodfired-pizza.webp',
   '/images/photos/garlic-bread.webp',
@@ -64,10 +64,9 @@ export const GallerySection: React.FC = () => {
     <div
       key={`${src}-${index}`}
       onClick={() => handleImageClick(src)}
-      className="group relative w-full aspect-[4/3] sm:aspect-[16/10] cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
+      className="group relative w-full aspect-[4/3] sm:aspect-[16/10] cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl border border-black/10 dark:border-white/10 transition-all duration-300 hover:scale-[1.03] shadow-md hover:shadow-2xl"
       style={{
         backgroundColor: 'var(--color-bg-surface)',
-        borderColor: 'var(--color-card-border)',
       }}
     >
       <picture className="contents">
@@ -108,76 +107,68 @@ export const GallerySection: React.FC = () => {
         backgroundColor: 'var(--color-bg-page)',
       }}
     >
-      {/* Editorial Intro Header - matches DemoVariant1 exact layout (-mb-16) */}
-      <ContainerStagger className="relative z-20 -mb-12 sm:-mb-16 place-self-center px-4 pt-16 sm:pt-20 text-center max-w-3xl mx-auto flex flex-col items-center">
-        <ContainerAnimated>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 mb-3">
-            <Utensils className="w-3.5 h-3.5 text-amber-500" />
-            <span>GENUINE FOOGLE MENU &amp; MOMENTS</span>
-          </div>
-        </ContainerAnimated>
+      {/* Editorial Header Section */}
+      <div className="pt-16 pb-4 sm:pt-20 sm:pb-6 relative z-20">
+        <ContainerStagger className="text-center max-w-3xl mx-auto px-4 flex flex-col items-center">
+          <ContainerAnimated>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 mb-3">
+              <Utensils className="w-3.5 h-3.5 text-amber-500" />
+              <span>GENUINE FOOGLE MENU &amp; MOMENTS</span>
+            </div>
+          </ContainerAnimated>
 
-        <ContainerAnimated>
-          <h2
-            id="gallery-main-heading"
-            className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
-          >
-            Good Food,{' '}
-            <span className="font-serif italic text-amber-600 dark:text-amber-400">
-              Good Moments
+          <ContainerAnimated>
+            <h2
+              id="gallery-main-heading"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+            >
+              Good Food,{' '}
+              <span className="font-serif italic text-amber-600 dark:text-amber-400">
+                Good Moments
+              </span>
+            </h2>
+          </ContainerAnimated>
+
+          <ContainerAnimated className="my-2.5 sm:my-3">
+            <p className="text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-xl">
+              Authentic woodfired pizzas, loaded pastas, decadent waffles, and artisanal coolers crafted fresh daily in Panchwati, Udaipur.
+            </p>
+          </ContainerAnimated>
+
+          <ContainerAnimated className="flex items-center justify-center gap-3">
+            <a href="#menu">
+              <Button className="gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md">
+                Explore Full Menu <ArrowRight className="w-4 h-4" />
+              </Button>
+            </a>
+            <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium px-3 py-1.5 rounded-full border border-black/5 dark:border-white/10">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              Scroll down to tilt 3D gallery
             </span>
-          </h2>
-        </ContainerAnimated>
-
-        <ContainerAnimated className="my-3 sm:my-4">
-          <p className="text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-xl">
-            Explore authentic woodfired pizzas, loaded pastas, decadent waffles, and artisanal coolers crafted fresh daily in Panchwati, Udaipur.
-          </p>
-        </ContainerAnimated>
-
-        <ContainerAnimated className="flex items-center justify-center gap-3">
-          <a href="#menu">
-            <Button className="gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md">
-              Explore Full Menu <ArrowRight className="w-4 h-4" />
-            </Button>
-          </a>
-          <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium px-3 py-1.5 rounded-full border border-black/5 dark:border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            Scroll to tilt &amp; unfurl 3D gallery
-          </span>
-        </ContainerAnimated>
-      </ContainerStagger>
-
-      {/* Ambient background soft glow */}
-      <div
-        className="pointer-events-none absolute z-10 h-[50vh] w-full"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 30%, rgba(217, 119, 6, 0.18), transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-      />
+          </ContainerAnimated>
+        </ContainerStagger>
+      </div>
 
       {/* 
-        3D ContainerScroll (h-[320vh] with sticky h-screen):
-        As the user scrolls, the matrix starts at a deep 3D floor perspective (rotateX: 75deg)
-        and unfurls upright (rotateX: 0deg) as it scrolls into full view!
+        3D ContainerScroll (h-[260vh]):
+        Starts as a 3D floor plane in perspective, tilts upright as user scrolls into view!
       */}
-      <ContainerScroll className="relative h-[320vh]">
-        <ContainerSticky className="h-screen flex items-center justify-center px-3 sm:px-6 md:px-8">
-          <div className="w-full max-w-6xl mx-auto pt-12 sm:pt-16">
-            <GalleryContainer className="max-h-[82vh]">
+      <ContainerScroll className="relative h-[250vh] sm:h-[270vh]">
+        <ContainerSticky className="h-[calc(100vh-72px)] top-[72px] flex items-center justify-center px-3 sm:px-6 md:px-8">
+          <div className="w-full max-w-6xl mx-auto py-2">
+            <GalleryContainer className="w-full max-h-[82vh]">
               {/* Column 1 */}
-              <GalleryCol yRange={['-10%', '2%']} className="-mt-2">
+              <GalleryCol yRange={['-12%', '4%']} className="-mt-3">
                 {IMAGES_1.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
               </GalleryCol>
 
               {/* Column 2 (Offset center with opposing parallax like demo) */}
-              <GalleryCol className="mt-[-40%] sm:mt-[-50%]" yRange={['15%', '5%']}>
+              <GalleryCol className="mt-[-28%] sm:mt-[-35%]" yRange={['16%', '0%']}>
                 {IMAGES_2.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
               </GalleryCol>
 
               {/* Column 3 */}
-              <GalleryCol yRange={['-10%', '2%']} className="-mt-2">
+              <GalleryCol yRange={['-12%', '4%']} className="-mt-3">
                 {IMAGES_3.map((src, idx) => renderCard(src, idx, 'Foogle Specialty'))}
               </GalleryCol>
             </GalleryContainer>

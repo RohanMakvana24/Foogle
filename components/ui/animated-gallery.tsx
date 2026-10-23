@@ -67,7 +67,7 @@ export const ContainerScroll = ({
         ref={scrollRef}
         className={cn("relative min-h-[120vh]", className)}
         style={{
-          perspective: "1200px",
+          perspective: "1000px",
           perspectiveOrigin: "center top",
           transformStyle: "preserve-3d",
           ...style,
@@ -89,11 +89,11 @@ export const ContainerSticky = ({
   return (
     <div
       className={cn(
-        "sticky left-0 top-0 min-h-[30rem] w-full overflow-hidden",
+        "sticky left-0 top-0 min-h-[30rem] w-full overflow-hidden flex items-center justify-center",
         className
       )}
       style={{
-        perspective: "1200px",
+        perspective: "1000px",
         perspectiveOrigin: "center top",
         transformStyle: "preserve-3d",
         transformOrigin: "50% 50%",
@@ -112,21 +112,21 @@ export const GalleryContainer = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div">) => {
   const { scrollYProgress } = useContainerScrollContext();
-  // EXACT DEMO SPEC: rotateX from 75 to 0 as user scrolls from 0 to 0.5, then scale from 1.2 to 1
-  const rotateX = useTransform(scrollYProgress, [0, 0.5], [75, 0]);
-  const scale = useTransform(scrollYProgress, [0.5, 0.9], [1.2, 1]);
+  // Starts flat/slanted on the floor at rotateX: 68deg, as user scrolls it dramatically tilts up into facing view at 0deg!
+  const rotateX = useTransform(scrollYProgress, [0, 0.55], [68, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.55, 0.95], [1.15, 1, 0.95]);
 
   return (
     <motion.div
       className={cn(
-        "relative grid size-full grid-cols-3 gap-2 sm:gap-4 md:gap-5 rounded-2xl will-change-transform",
+        "relative grid size-full grid-cols-3 gap-2.5 sm:gap-4 md:gap-5 rounded-2xl will-change-transform",
         className
       )}
       style={{
         rotateX,
         scale,
         transformStyle: "preserve-3d",
-        perspective: "1200px",
+        transformOrigin: "center bottom",
         ...style,
       }}
       {...props}
@@ -140,18 +140,18 @@ GalleryContainer.displayName = "GalleryContainer";
 export const GalleryCol = ({
   className,
   style,
-  yRange = ["0%", "-10%"],
+  yRange = ["-15%", "5%"],
   ...props
 }: HTMLMotionProps<"div"> & { yRange?: string[] }) => {
   const { scrollYProgress } = useContainerScrollContext();
-  // EXACT DEMO SPEC: y translates over [0.5, 1] using yRange
-  const y = useTransform(scrollYProgress, [0.5, 1], yRange);
+  const y = useTransform(scrollYProgress, [0.35, 1], yRange);
 
   return (
     <motion.div
-      className={cn("relative flex w-full flex-col gap-2 sm:gap-4 md:gap-5 will-change-transform", className)}
+      className={cn("relative flex w-full flex-col gap-2.5 sm:gap-4 md:gap-5 will-change-transform", className)}
       style={{
         y,
+        transformStyle: "preserve-3d",
         ...style,
       }}
       {...props}
@@ -172,14 +172,14 @@ export const ContainerStagger = React.forwardRef<
       whileInView={"visible"}
       viewport={{ once: true, ...viewport }}
       transition={{
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
         ...transition,
       }}
       {...props}
     />
   );
 });
-ContainerStagger.displayName = "ContainerStagger"
+ContainerStagger.displayName = "ContainerStagger";
 
 export const ContainerAnimated = React.forwardRef<
   HTMLDivElement,
