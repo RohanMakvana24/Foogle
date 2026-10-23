@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { buildSrcSet } from '../../lib/imageSrcSet';
 import { Container } from '../common/Container';
 import { HangingBadges3D, BADGE_CONFIGS } from './HangingBadges3D';
 import {
@@ -77,7 +78,7 @@ const STORIES: Record<string, ChannelStory> = {
     quote:
       'Best woodfired pizza in Udaipur! The sourdough crust has the perfect airy crumb and authentic leopard spotting. The courtyard garden atmosphere is absolutely magical.',
     author: 'Aarav Sharma',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+    avatar: '/images/photos/avatar-1.webp',
     role: 'Local Guide Level 7 · 142 reviews',
     timeAgo: '2 days ago',
     helpfulCount: '48 found helpful',
@@ -98,7 +99,7 @@ const STORIES: Record<string, ChannelStory> = {
     quote:
       'Golden hour in the sun-drenched courtyard with sourdough margherita and iced espresso tonic. Udaipur’s coziest artisan cafe aesthetic.',
     author: 'Priya Mehra',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80',
+    avatar: '/images/photos/avatar-2.webp',
     role: '@priya_wanderlust · Food & Travel Creator',
     timeAgo: 'Yesterday',
     helpfulCount: '2.4K likes · 240 shares',
@@ -119,7 +120,7 @@ const STORIES: Record<string, ChannelStory> = {
     quote:
       'Hosted our family anniversary dinner in the courtyard garden. Warm hospitality, live acoustic weekend vibe, and phenomenal artisanal pastas.',
     author: 'Vikram & Meera Rajput',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+    avatar: '/images/photos/avatar-3.webp',
     role: 'Udaipur Diners · Verified Recommendation',
     timeAgo: '4 days ago',
     helpfulCount: '98% recommend to friends',
@@ -140,7 +141,7 @@ const STORIES: Record<string, ChannelStory> = {
     quote:
       '450°C stone oven fired up early today. 48-hr slow fermented sourdough batches ready for lunch service. Come grab a fresh slice before it sells out.',
     author: 'Chef Pass · Foogle Kitchen',
-    avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=200&auto=format&fit=crop&q=80',
+    avatar: '/images/photos/avatar-4.webp',
     role: 'Head Pizzaiolo · Live from the Oven',
     timeAgo: '3 hours ago',
     helpfulCount: '120 reposts · 840 likes',
@@ -194,7 +195,7 @@ export const SocialProofSection: React.FC = () => {
           <div className="max-w-2xl">
             {/* Pill Eyebrow */}
             <div
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-serif italic tracking-wide mb-4 border shadow-sm backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-serif italic tracking-wide mb-4 border shadow-sm"
               style={{
                 backgroundColor: isDark ? 'rgba(245,158,11,0.08)' : 'rgba(217,119,6,0.08)',
                 borderColor: isDark ? 'rgba(245,158,11,0.25)' : 'rgba(217,119,6,0.22)',
@@ -428,7 +429,7 @@ export const SocialProofSection: React.FC = () => {
         {/* 5. Minimal Interactive Instruction Pill (Desktop & Tablet) */}
         <div className="relative -mt-10 sm:-mt-8 pb-8 hidden sm:flex items-center justify-center z-10 pointer-events-none select-none px-4">
           <div
-            className="inline-flex items-center gap-3 sm:gap-5 px-5 py-2 rounded-full border shadow-lg backdrop-blur-xl"
+            className="inline-flex items-center gap-3 sm:gap-5 px-5 py-2 rounded-full border shadow-lg"
             style={{
               backgroundColor: isDark ? 'rgba(18,22,20,0.85)' : 'rgba(255,255,255,0.92)',
               borderColor: isDark ? 'rgba(245,158,11,0.25)' : 'rgba(217,119,6,0.2)',
@@ -436,8 +437,8 @@ export const SocialProofSection: React.FC = () => {
             }}
           >
             <span className="inline-flex items-center gap-2 text-xs font-serif italic">
-              <MousePointer className="w-3.5 h-3.5 text-amber-500" />
-              <span>Grab &amp; swing cards naturally</span>
+              <Coffee className="w-3.5 h-3.5 text-amber-500" />
+              <span>Courtyard Garden Memories</span>
             </span>
             <span
               className="w-1 h-1 rounded-full"
@@ -445,7 +446,7 @@ export const SocialProofSection: React.FC = () => {
             />
             <span className="inline-flex items-center gap-2 text-xs font-serif italic">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Click any card to read its full story</span>
+              <span>Real Stories from Udaipur Diners</span>
             </span>
           </div>
         </div>
@@ -478,7 +479,7 @@ export const SocialProofSection: React.FC = () => {
                 }}
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>3D Interactive Review Plaques</span>
+                <span>Verified Guest Reviews</span>
               </div>
               <h3
                 className="text-3xl sm:text-4xl font-serif tracking-tight leading-tight"
@@ -490,11 +491,11 @@ export const SocialProofSection: React.FC = () => {
                 className="mt-2 text-xs sm:text-sm font-serif leading-relaxed"
                 style={{ color: isDark ? 'rgba(203,213,225,0.72)' : 'rgba(71,85,105,0.85)' }}
               >
-                Tilt your cursor or tap to experience stereoscopic 3D depth, verified Google Review badges, and live courtyard stories.
+                Read authentic Google Reviews, verified diner ratings, and courtyard moments from our cherished Udaipur guests.
               </p>
             </div>
 
-            {/* Quick 3D status chip */}
+            {/* Verified Rating status chip */}
             <div
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono border shadow-2xs self-start sm:self-auto shrink-0"
               style={{
@@ -503,8 +504,8 @@ export const SocialProofSection: React.FC = () => {
                 color: isDark ? '#cbd5e1' : '#475569',
               }}
             >
-              <MousePointer className="w-3.5 h-3.5 text-amber-500" />
-              <span>Hover cards for 3D tilt</span>
+              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+              <span>4.9★ Verified Guest Rating</span>
             </div>
           </div>
 
@@ -704,10 +705,13 @@ function ThreeDReviewCard({
         <div className="flex items-center gap-3 mb-3">
           <img
             src={story.avatar}
+            srcSet={buildSrcSet(story.avatar)}
+            sizes="36px"
             alt={story.author}
             className="w-9 h-9 rounded-full object-cover border-2 shrink-0 shadow-xs"
             style={{ borderColor: `${story.accentColor}40` }}
             loading="lazy"
+          decoding="async"
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1">

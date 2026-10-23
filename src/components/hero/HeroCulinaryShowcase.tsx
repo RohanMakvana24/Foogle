@@ -16,9 +16,9 @@ export const HeroCulinaryShowcase: React.FC = () => {
   const [drinkImageLoaded, setDrinkImageLoaded] = useState(false);
 
   const heroImageUrl =
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&auto=format&fit=crop&q=80';
+    '/images/photos/cafe-interior.webp';
   const drinkImageUrl =
-    'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=300&auto=format&fit=crop&q=80';
+    '/images/photos/cold-coffee.webp';
 
   return (
     <div className="relative w-full max-w-xl mx-auto lg:max-w-none select-none">

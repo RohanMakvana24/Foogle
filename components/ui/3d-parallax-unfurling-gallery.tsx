@@ -9,24 +9,23 @@ import React, {
 } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Maximize2 } from "lucide-react";
+import { buildSrcSet, buildAvifSrcSet } from '../../src/lib/imageSrcSet';
 
+// Local gallery fallback (used only when fewer than 4 images are supplied).
+// All assets live in /public/images/photos so the site works fully offline.
 const DEFAULT_GALLERY_IMAGES = [
-  "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1000&auto=format&fit=crop&q=80", // Woodfired Pizza
-  "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=800&auto=format&fit=crop&q=80",  // Cold Foam Latte
-  "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80",  // Sizzling Brownie
-  "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?w=800&auto=format&fit=crop&q=80",  // Penne Pasta
-  "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80",  // Cafe Interior Vibe
-  "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=800&auto=format&fit=crop&q=80",  // Barista Pour
-  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80",  // Gourmet Pizza
-  "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=800&auto=format&fit=crop&q=80",  // Berry Frappe
-  "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=800&auto=format&fit=crop&q=80",  // Brunch Pancakes
-  "https://images.unsplash.com/photo-1550614000-4b95d4ed798a?auto=format&fit=crop&w=600&q=80",   // Cafe Treats
-  "https://cdn.21st.dev/assets/mirror/a9/a9c2900d44fe6288b344f447cb12a05f7e64c439479a8ccb977d3b20eb371156.jpg",
-  "https://cdn.21st.dev/assets/mirror/29/29cf6ad39eb198c05b8d915fca0becfd3d270d510d32eaec1b886c426c681c67.jpg",
-  "https://cdn.21st.dev/assets/mirror/61/6154958e9df110914005256ff2319d43a2c2e0fc8bb54e9f8bce7b91fdce5df1.jpg",
-  "https://cdn.21st.dev/assets/mirror/6d/6db92aff3c02cce69e2c672a6dd4e99cbf5c55d68fbf08c460527e6c7c5b64ba.jpg",
-  "https://cdn.21st.dev/assets/mirror/42/42ad2d0680dba697d578434e5af5620c7ab1c7c55bc36cec3b55eec8b7a79cbf.jpg",
-  "https://cdn.21st.dev/assets/mirror/cd/cd3dc09b1bbed97cfc879e2c5e62fdbc68dc4070b6105e476410d70e31d1e459.jpg",
+  "/images/photos/woodfired-pizza.webp",
+  "/images/photos/cold-coffee.webp",
+  "/images/photos/sizzling-brownie.webp",
+  "/images/photos/white-penne-pasta.webp",
+  "/images/photos/cafe-interior.webp",
+  "/images/photos/barista-pour.webp",
+  "/images/photos/paneer-tabasco-pizza.webp",
+  "/images/photos/blueberry-shake.webp",
+  "/images/photos/brunch-pancakes.webp",
+  "/images/photos/nachos.webp",
+  "/images/photos/pav-bhaji.webp",
+  "/images/photos/nutella-waffle.webp",
 ];
 
 export interface ImageCardProps {
@@ -45,19 +44,29 @@ const ImageCard: React.FC<ImageCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className="group relative w-full h-[180px] sm:h-[240px] md:h-[320px] flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl border transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
+      className="group relative w-full h-[145px] sm:h-[240px] md:h-[320px] flex-shrink-0 cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
       style={{
         backgroundColor: "var(--color-bg-surface)",
         borderColor: "var(--color-card-border)",
       }}
     >
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        onLoad={onLoad}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-      />
+      <picture className="contents">
+        <source
+          type="image/avif"
+          srcSet={buildAvifSrcSet(src)}
+          sizes="(max-width: 640px) 80vw, 460px"
+        />
+        <img
+          src={src}
+          srcSet={buildSrcSet(src)}
+          sizes="(max-width: 640px) 80vw, 460px"
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onLoad={onLoad}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </picture>
       {/* Subtle hover gradient & expand badge */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3 pointer-events-none">
         <span className="text-[11px] font-medium text-white/90 drop-shadow-sm truncate">
@@ -137,6 +146,17 @@ export default function ThreeDParallaxUnfurlingGallery({
     mass: 0.4,
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const updateSize = () => {
+      setIsMobile(typeof window !== "undefined" && window.innerWidth < 640);
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   // 3D Matrix animations (smooth & natural angles)
   const rotateY = useTransform(smoothProgress, [0.05, 1], [-32, -4]);
   const rotateX = useTransform(smoothProgress, [0.05, 1], [18, 2]);
@@ -148,6 +168,34 @@ export default function ThreeDParallaxUnfurlingGallery({
   const yCol2 = useTransform(smoothProgress, [0.05, 1], ["-30%", "10%"]);
   const yCol3 = useTransform(smoothProgress, [0.05, 1], ["0%", "-30%"]);
   const yCol4 = useTransform(smoothProgress, [0.05, 1], ["-20%", "15%"]);
+
+  // Mobile 4-to-2 column transition transforms:
+  // Starts with 4 columns side-by-side, then as user scrolls, cols 3 & 4 fade/shrink to leave 2 big clean columns!
+  const col12Width = useTransform(smoothProgress, (p) => {
+    if (!isMobile) return "24vw";
+    const clamped = Math.min(Math.max((p - 0.15) / (0.70 - 0.15), 0), 1);
+    const val = 27 + clamped * (43 - 27);
+    return `${val}vw`;
+  });
+
+  const col34Width = useTransform(smoothProgress, (p) => {
+    if (!isMobile) return "24vw";
+    const clamped = Math.min(Math.max((p - 0.15) / (0.70 - 0.15), 0), 1);
+    const val = 27 * (1 - clamped);
+    return `${val}vw`;
+  });
+
+  const col34Opacity = useTransform(smoothProgress, (p) => {
+    if (!isMobile) return 1;
+    const clamped = Math.min(Math.max((p - 0.18) / (0.65 - 0.18), 0), 1);
+    return 1 - clamped;
+  });
+
+  const col34Scale = useTransform(smoothProgress, (p) => {
+    if (!isMobile) return 1;
+    const clamped = Math.min(Math.max((p - 0.18) / (0.65 - 0.18), 0), 1);
+    return 1 - clamped * 0.25;
+  });
 
   const content = (
     <div
@@ -219,12 +267,15 @@ export default function ThreeDParallaxUnfurlingGallery({
                 z: translateZ,
                 transformStyle: "preserve-3d",
               }}
-              className="flex gap-3 sm:gap-4 md:gap-5 justify-center items-center w-[125vw] h-[150vh] origin-center opacity-100 will-change-transform backface-hidden"
+              className="flex gap-2 sm:gap-4 md:gap-5 justify-center items-center w-[135vw] sm:w-[125vw] h-[150vh] origin-center opacity-100 will-change-transform backface-hidden"
             >
               {/* Column 1 */}
               <motion.div
-                style={{ y: yCol1 }}
-                className="flex flex-col gap-3 sm:gap-4 md:gap-5 w-[42vw] sm:w-[24vw] min-w-[140px] sm:min-w-[190px] md:min-w-[230px] pointer-events-auto"
+                style={{
+                  y: yCol1,
+                  width: col12Width,
+                }}
+                className="flex flex-col gap-2.5 sm:gap-4 md:gap-5 min-w-0 sm:min-w-[190px] md:min-w-[230px] pointer-events-auto"
               >
                 {colMedia.col1.map((src, index) => (
                   <ImageCard
@@ -238,8 +289,11 @@ export default function ThreeDParallaxUnfurlingGallery({
 
               {/* Column 2 */}
               <motion.div
-                style={{ y: yCol2 }}
-                className="flex flex-col gap-3 sm:gap-4 md:gap-5 w-[42vw] sm:w-[24vw] min-w-[140px] sm:min-w-[190px] md:min-w-[230px] pointer-events-auto"
+                style={{
+                  y: yCol2,
+                  width: col12Width,
+                }}
+                className="flex flex-col gap-2.5 sm:gap-4 md:gap-5 min-w-0 sm:min-w-[190px] md:min-w-[230px] pointer-events-auto"
               >
                 {colMedia.col2.map((src, index) => (
                   <ImageCard
@@ -251,10 +305,15 @@ export default function ThreeDParallaxUnfurlingGallery({
                 ))}
               </motion.div>
 
-              {/* Column 3 (Tablet & Desktop only for silky mobile 60fps) */}
+              {/* Column 3 — visible on mobile at start (4 columns), unfurls/fades to 2 columns on scroll */}
               <motion.div
-                style={{ y: yCol3 }}
-                className="hidden sm:flex flex-col gap-3 sm:gap-4 md:gap-5 w-[24vw] min-w-[190px] md:min-w-[230px] pointer-events-auto"
+                style={{
+                  y: yCol3,
+                  width: col34Width,
+                  opacity: col34Opacity,
+                  scale: col34Scale,
+                }}
+                className="flex flex-col gap-2.5 sm:gap-4 md:gap-5 min-w-0 sm:min-w-[190px] md:min-w-[230px] overflow-hidden pointer-events-auto"
               >
                 {colMedia.col3.map((src, index) => (
                   <ImageCard
@@ -266,10 +325,15 @@ export default function ThreeDParallaxUnfurlingGallery({
                 ))}
               </motion.div>
 
-              {/* Column 4 (Tablet & Desktop only for silky mobile 60fps) */}
+              {/* Column 4 — visible on mobile at start (4 columns), unfurls/fades to 2 columns on scroll */}
               <motion.div
-                style={{ y: yCol4 }}
-                className="hidden sm:flex flex-col gap-3 sm:gap-4 md:gap-5 w-[24vw] min-w-[190px] md:min-w-[230px] pointer-events-auto"
+                style={{
+                  y: yCol4,
+                  width: col34Width,
+                  opacity: col34Opacity,
+                  scale: col34Scale,
+                }}
+                className="flex flex-col gap-2.5 sm:gap-4 md:gap-5 min-w-0 sm:min-w-[190px] md:min-w-[230px] overflow-hidden pointer-events-auto"
               >
                 {colMedia.col4.map((src, index) => (
                   <ImageCard

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Utensils } from 'lucide-react';
+import { buildSrcSet } from '../../lib/imageSrcSet';
 
 export interface MediaFrameProps {
   src?: string;
@@ -46,7 +47,11 @@ export const MediaFrame: React.FC<MediaFrameProps> = ({
       {!showFallback ? (
         <img
           src={src}
+          srcSet={buildSrcSet(src)}
+          sizes="(max-width: 768px) 100vw, 50vw"
           alt={alt}
+          loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           onError={() => setHasError(true)}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"

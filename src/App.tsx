@@ -16,6 +16,9 @@ import { LocationSection } from './components/location/LocationSection';
 import { ContactSection } from './components/contact/ContactSection';
 import { VisitCtaSection } from './components/cta/VisitCtaSection';
 import { GravityFooter } from './components/footer/GravityFooter';
+import { CartProvider } from './context/CartContext';
+import { CartDrawer } from './components/cart/CartDrawer';
+import { FloatingCartBar } from './components/cart/FloatingCartBar';
 
 function FoogleWebsite() {
 
@@ -26,7 +29,7 @@ function FoogleWebsite() {
 
       {/* 2. Main Page Content (offset by fixed 72px navbar) */}
       <main className="flex-1 pt-[72px]">
-        {/* Phase 2: Hero Section (Anchor #home) */}
+        {/* Phase 2: Hero Section (Anchor #home) — with integrated scroll-driven burger assembly */}
         <HeroSection />
 
         {/* Phase 4: Signature Dishes Editorial Showcase */}
@@ -56,6 +59,10 @@ function FoogleWebsite() {
 
       {/* 3. Gravity Letters Interactive Footer */}
       <GravityFooter />
+
+      {/* 4. Luxury Cart Drawer & Floating Cart Bar for WhatsApp Ordering */}
+      <CartDrawer />
+      <FloatingCartBar />
     </div>
   );
 }
@@ -63,7 +70,9 @@ function FoogleWebsite() {
 export default function App() {
   return (
     <ThemeProvider>
-      <FoogleWebsite />
+      <CartProvider>
+        <FoogleWebsite />
+      </CartProvider>
     </ThemeProvider>
   );
 }

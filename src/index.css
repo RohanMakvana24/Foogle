@@ -349,3 +349,41 @@ body {
   animation-direction: reverse !important;
 }
 
+/* ── Performance Optimizations (60 FPS Butter-Smooth Scrolling) ── */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* GPU layer promotion for transform-heavy items */
+.preserve-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Image rendering optimization */
+img {
+  content-visibility: auto;
+}
+
+/* Skip painting for the static footer until it is scrolled into view */
+footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+/* Respect the visitor's motion preference (also keeps low-end devices snappy) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

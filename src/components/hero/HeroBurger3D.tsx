@@ -184,7 +184,7 @@ export const HeroBurger3D: React.FC<HeroBurger3DProps> = ({ onLoaded }) => {
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-amber-400 z-10">
           <div className="w-10 h-10 border-3 border-amber-400 border-t-transparent rounded-full animate-spin" />
           <span className="text-xs font-semibold tracking-widest uppercase text-amber-200">
-            Loading 3D Burger...
+            Crafting Gourmet Burger...
           </span>
         </div>
       )}

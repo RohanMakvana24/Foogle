@@ -399,8 +399,37 @@ interface HangingBadges3DProps {
 }
 
 export function HangingBadges3D({ activeId, onSelect, isDark = true }: HangingBadges3DProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(true);
+
+  // Only render the 3D scene while the section is on screen (huge mobile win).
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    let onScreen = true;
+    const sync = () => setIsActive(onScreen && !document.hidden);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        onScreen = entries.some((entry) => entry.isIntersecting);
+        sync();
+      },
+      { rootMargin: '150px' }
+    );
+    observer.observe(el);
+
+    const onVisibility = () => sync();
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
   return (
-    <div className="w-full h-[760px] sm:h-[820px] relative select-none">
+    <div ref={wrapRef} className="w-full h-[760px] sm:h-[820px] relative select-none">
       <Suspense
         fallback={
           <div className="w-full h-full flex flex-col items-center justify-center gap-3">
@@ -410,6 +439,8 @@ export function HangingBadges3D({ activeId, onSelect, isDark = true }: HangingBa
         }
       >
         <Canvas
+          frameloop={isActive ? 'always' : 'never'}
+          dpr={[1, 1.5]}
           camera={{ position: [0, 1.8, 12.0], fov: 43 }}
           gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
           style={{ background: 'transparent' }}

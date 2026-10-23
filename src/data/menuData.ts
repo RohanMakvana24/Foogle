@@ -22,7 +22,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pizza',
     categoryLabel: 'Pizza',
     description: 'Classic crisp crust topped with vibrant tomato sauce, melted mozzarella, and fresh basil leaves.',
-    imageUrl: '/images/dishes/pizza-margherita.jpg',
+    imageUrl: '/images/dishes/pizza-margherita.webp',
     tabletopMaterial: 'Warm Italian travertine stone slab with subtle natural veining',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#EA4335', // Red
@@ -33,7 +33,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pizza',
     categoryLabel: 'Pizza',
     description: 'Marinated spiced paneer cubes, crisp capsicum, and onions baked with rich melted cheese.',
-    imageUrl: '/images/dishes/pizza-paneer-tikka.jpg',
+    imageUrl: '/images/dishes/pizza-paneer-tikka.webp',
     tabletopMaterial: 'Rustic reclaimed dark oak wood table with warm natural grain',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#FBBC05', // Yellow
@@ -44,7 +44,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pizza',
     categoryLabel: 'Pizza',
     description: 'Loaded with a vibrant medley of colourful bell peppers, black olives, sweet corn, and herbs.',
-    imageUrl: '/images/dishes/pizza-exotic.jpg',
+    imageUrl: '/images/dishes/pizza-exotic.webp',
     tabletopMaterial: 'Textured matte beige ceramic tabletop with linen napkin corner',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#34A853', // Green
@@ -55,7 +55,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pizza',
     categoryLabel: 'Pizza',
     description: 'Chef-crafted signature crust featuring house specialty toppings and a double blend of melted cheese.',
-    imageUrl: '/images/dishes/pizza-foogle-special.jpg',
+    imageUrl: '/images/dishes/pizza-foogle-special.webp',
     tabletopMaterial: 'Polished charcoal slate table with warm rim light reflections',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#4285F4', // Blue
@@ -66,7 +66,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pizza',
     categoryLabel: 'Pizza',
     description: 'Specially prepared without root vegetables, using fresh herbs, tomatoes, bell peppers, and cheese.',
-    imageUrl: '/images/dishes/pizza-jain-special.jpg',
+    imageUrl: '/images/dishes/pizza-jain-special.webp',
     tabletopMaterial: 'Clean light travertine table with fresh herb sprig nearby',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#34A853', // Green
@@ -79,7 +79,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'sandwiches',
     categoryLabel: 'Sandwich',
     description: 'Freshly sliced garden cucumbers, ripe tomatoes, and house seasoning layered in soft cafe bread.',
-    imageUrl: '/images/dishes/sandwich-veg.jpg',
+    imageUrl: '/images/dishes/sandwich-veg.webp',
     tabletopMaterial: 'Light honey oak cafe tabletop with soft linen texture',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#34A853', // Green
@@ -90,7 +90,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'sandwiches',
     categoryLabel: 'Sandwich',
     description: 'Golden toasted bread stuffed with seasoned vegetable filling and melted cheese, served crisp and warm.',
-    imageUrl: '/images/dishes/sandwich-grilled.jpg',
+    imageUrl: '/images/dishes/sandwich-grilled.webp',
     tabletopMaterial: 'Rustic dark slate board on warm wooden table',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#FBBC05', // Yellow
@@ -103,7 +103,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pasta',
     categoryLabel: 'Pasta',
     description: 'Penne tossed in a fiery, garlic-infused San Marzano tomato sauce with chilli flakes and Italian herbs.',
-    imageUrl: '/images/dishes/pasta-arrabbiata.jpg',
+    imageUrl: '/images/dishes/pasta-arrabbiata.webp',
     tabletopMaterial: 'Warm terracotta stone tabletop with rustic charm',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#EA4335', // Red
@@ -114,7 +114,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pasta',
     categoryLabel: 'Pasta',
     description: 'Creamy, velvety white sauce simmered with butter, herbs, and finely grated cheese coating tender pasta.',
-    imageUrl: '/images/dishes/pasta-alfredo.jpg',
+    imageUrl: '/images/dishes/pasta-alfredo.webp',
     tabletopMaterial: 'Dark walnut dining table with soft depth',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#FBBC05', // Yellow
@@ -125,7 +125,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'pasta',
     categoryLabel: 'Pasta',
     description: 'The best of both worlds — a rich pink blend of zesty red marinara and silky creamy white sauce.',
-    imageUrl: '/images/dishes/pasta-mix-sauce.jpg',
+    imageUrl: '/images/dishes/pasta-mix-sauce.webp',
     tabletopMaterial: 'Cream travertine tabletop with warm natural light',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#4285F4', // Blue
@@ -138,7 +138,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'sides-snacks',
     categoryLabel: 'Sides & Snacks',
     description: 'Artisanal baguette slices brushed generously with fragrant garlic butter and toasted to golden perfection.',
-    imageUrl: '/images/dishes/sides-garlic-bread.jpg',
+    imageUrl: '/images/dishes/sides-garlic-bread.webp',
     tabletopMaterial: 'Rustic olive wood platter on dark cafe table',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#FBBC05', // Yellow
@@ -149,7 +149,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'sides-snacks',
     categoryLabel: 'Sides & Snacks',
     description: 'Classic golden potato batons fried until crisp on the outside and tender inside, lightly salted.',
-    imageUrl: '/images/dishes/sides-french-fries.jpg',
+    imageUrl: '/images/dishes/sides-french-fries.webp',
     tabletopMaterial: 'Industrial matte black zinc cafe table with dip ramekin',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#FBBC05', // Yellow
@@ -160,7 +160,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'sides-snacks',
     categoryLabel: 'Sides & Snacks',
     description: 'Crunchy corn tortilla chips served with warm melted cheese drizzle and house tomato salsa.',
-    imageUrl: '/images/dishes/sides-nachos.jpg',
+    imageUrl: '/images/dishes/sides-nachos.webp',
     tabletopMaterial: 'Rustic dark slate platter on travertine cafe table',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#EA4335', // Red
@@ -173,7 +173,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'cafe-specials',
     categoryLabel: 'Cafe Special',
     description: 'Classic spiced cafe noodles prepared hot and piping with aromatic herbs and mild masala blend.',
-    imageUrl: '/images/dishes/special-maggi.jpg',
+    imageUrl: '/images/dishes/special-maggi.webp',
     tabletopMaterial: 'Warm cafe wooden table with steaming cup of chai in background',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#FBBC05', // Yellow
@@ -184,7 +184,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'cafe-specials',
     categoryLabel: 'Cafe Special',
     description: 'Spicy sprouted lentil curry topped with crunchy farsan and diced onions, served with soft buttered pav.',
-    imageUrl: '/images/dishes/special-misal-pav.jpg',
+    imageUrl: '/images/dishes/special-misal-pav.webp',
     tabletopMaterial: 'Handcrafted ceramic serving tray on stone table',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#EA4335', // Red
@@ -195,7 +195,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'cafe-specials',
     categoryLabel: 'Cafe Special',
     description: 'Fresh button mushrooms sautéed in rich garlic butter with freshly cracked black pepper and parsley.',
-    imageUrl: '/images/dishes/special-butter-garlic-mushroom.jpg',
+    imageUrl: '/images/dishes/special-butter-garlic-mushroom.webp',
     tabletopMaterial: 'Rustic cast-iron pan on dark wood trivet',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#34A853', // Green
@@ -206,7 +206,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'cafe-specials',
     categoryLabel: 'Cafe Special',
     description: 'Smooth, creamy chickpea and tahini dip drizzled with olive oil, accompanied by warm pita bread wedges.',
-    imageUrl: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?w=800&auto=format&fit=crop&q=80',
+    imageUrl: '/images/photos/hummus-pita.webp',
     tabletopMaterial: 'Mediterranean stone tabletop with warm natural daylight',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#4285F4', // Blue
@@ -219,7 +219,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'desserts',
     categoryLabel: 'Dessert',
     description: 'Freshly baked Belgian-style waffles with crisp golden pockets, served with rich chocolate or maple drizzle.',
-    imageUrl: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=800&auto=format&fit=crop&q=80',
+    imageUrl: '/images/photos/nutella-waffle.webp',
     tabletopMaterial: 'Sunlit marble cafe table with powdered sugar dusting',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#FBBC05', // Yellow
@@ -230,7 +230,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'desserts',
     categoryLabel: 'Dessert',
     description: 'Warm fudge brownie served on a piping hot iron sizzler plate topped with cold vanilla scoop and chocolate sauce.',
-    imageUrl: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80',
+    imageUrl: '/images/photos/sizzling-brownie.webp',
     tabletopMaterial: 'Rustic wooden trivet holding cast-iron sizzler on dark cafe table',
     tabletopCardPlacement: 'bottom-left',
     accentColor: '#EA4335', // Red
@@ -241,7 +241,7 @@ export const MENU_ITEMS: MenuItem[] = [
     categoryId: 'desserts',
     categoryLabel: 'Dessert',
     description: 'Crisp waffle taco shells filled with scoops of premium ice cream, sprinkled with crunchy toppings.',
-    imageUrl: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=800&auto=format&fit=crop&q=80',
+    imageUrl: '/images/photos/ice-cream-tacos.webp',
     tabletopMaterial: 'Contemporary bright cafe surface with colorful napkin',
     tabletopCardPlacement: 'bottom-right',
     accentColor: '#4285F4', // Blue

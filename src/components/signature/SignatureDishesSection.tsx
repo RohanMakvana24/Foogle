@@ -62,7 +62,7 @@ export const SignatureDishesSection: React.FC = () => {
               {/* Feature Food Visual Frame */}
               <div className="relative w-full overflow-hidden">
                 <MenuFoodVisual item={mainFeature} aspectRatio="16/10" className="rounded-none" />
-                <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-xs font-bold text-white shadow-md z-10">
+                <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 text-xs font-bold text-white shadow-md z-10">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Chef Highlight</span>
                 </div>

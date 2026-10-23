@@ -594,10 +594,24 @@ export function createFacebookFrontCanvas(): HTMLCanvasElement {
   ctx.strokeStyle = '#60A5FA';
   ctx.stroke();
 
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 165px "Inter", system-ui, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('f', ix + 18, iy + 62);
+  // Perfectly centered official Facebook 'f' vector icon
+  try {
+    ctx.save();
+    const fbScale = 7.8;
+    // 24x24 viewBox with optical center at (12.5, 12)
+    ctx.translate(ix - 12.5 * fbScale, iy - 12 * fbScale);
+    ctx.scale(fbScale, fbScale);
+    ctx.fillStyle = '#FFFFFF';
+    const fbPath = new Path2D('M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z');
+    ctx.fill(fbPath);
+    ctx.restore();
+  } catch (_) {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 165px "Inter", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('f', ix, iy + 6);
+  }
 
   // Brand Name
   ctx.fillStyle = '#FFFFFF';

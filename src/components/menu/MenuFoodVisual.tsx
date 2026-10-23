@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MenuItem } from '../../types/menu';
+import { buildSrcSet, buildAvifSrcSet } from '../../lib/imageSrcSet';
 import { TabletopBrandCard } from '../common/TabletopBrandCard';
 
 export interface MenuFoodVisualProps {
@@ -184,17 +185,27 @@ export const MenuFoodVisual: React.FC<MenuFoodVisualProps> = ({
     >
       {/* 1. Realistic Food Photo Image (Lazy Loaded, Crisp Object Cover) */}
       {item.imageUrl && !hasError && (
-        <img
-          src={item.imageUrl}
-          alt={`${item.name} served at Foogle Cafe, Panchwati, Udaipur`}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          onLoad={() => setImageLoaded(true)}
-          onError={() => setHasError(true)}
-          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
-            imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-102'
-          }`}
-        />
+        <picture className="contents">
+          <source
+            type="image/avif"
+            srcSet={buildAvifSrcSet(item.imageUrl)}
+            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 380px"
+          />
+          <img
+            src={item.imageUrl}
+            srcSet={buildSrcSet(item.imageUrl)}
+            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 380px"
+            alt={`${item.name} served at Foogle Cafe, Panchwati, Udaipur`}
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setHasError(true)}
+            className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
+              imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-102'
+            }`}
+          />
+        </picture>
       )}
 
       {/* 2. Seamless Vector Artwork Fallback / Loading Shimmer */}
@@ -242,7 +253,7 @@ export const MenuFoodVisual: React.FC<MenuFoodVisualProps> = ({
       )}
 
       {/* 5. Category Indicator Tag with Google Brand Color Accent */}
-      <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-semibold text-white/95 shadow-sm">
+      <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 text-[10px] font-semibold text-white/95 shadow-sm">
         <span
           className="w-2 h-2 rounded-full shrink-0"
           style={{ backgroundColor: item.accentColor || 'var(--color-brand-primary)' }}

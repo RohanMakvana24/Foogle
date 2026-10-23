@@ -3,7 +3,7 @@ import { Theme, ThemeContextValue } from '../types/theme';
 
 const STORAGE_KEY = 'foogle-theme';
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {

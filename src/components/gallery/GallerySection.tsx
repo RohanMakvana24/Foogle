@@ -50,12 +50,12 @@ export const GallerySection: React.FC = () => {
               <SectionHeading
                 eyebrow="GENUINE FOOGLE MENU &amp; MOMENTS"
                 title="Good Food, Good Moments"
-                description="Explore real culinary creations straight from Foogle's kitchen in Panchwati, Udaipur — authentic woodfired pizzas, loaded pastas, crispy snacks, decadent waffles, and specialty shakes in an unfurling 3D parallax showcase."
+                description="Explore real culinary creations straight from Foogle's kitchen in Panchwati, Udaipur — authentic woodfired pizzas, loaded pastas, crispy snacks, decadent waffles, and specialty shakes crafted fresh daily."
                 titleLevel="h2"
               />
             </div>
 
-            {/* Interactive Feature Badges */}
+            {/* Feature Badges */}
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300">
                 <Utensils className="w-3.5 h-3.5 text-emerald-500" />
@@ -63,11 +63,11 @@ export const GallerySection: React.FC = () => {
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                3D Parallax Unfurling
+                Atmosphere &amp; Moments
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-400">
                 <MousePointerClick className="w-3.5 h-3.5" />
-                Scroll Down To Unfurl
+                Scroll To Explore
               </span>
             </div>
           </div>

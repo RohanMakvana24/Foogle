@@ -41,6 +41,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         <img
           src="/assets/aistudio/image_0f6dabd4.png"
           alt="Foogle Cafe Official Logo"
+          decoding="async"
           className={`${imgHeight} w-auto object-contain transition-transform duration-300 group-hover:scale-105`}
         />
       </div>

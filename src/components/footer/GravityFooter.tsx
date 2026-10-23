@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { GravityLetters, GravityLettersRef } from '@/components/ui/GravityLetters';
+import React from 'react';
+import { AnimatedFooterLogo } from './AnimatedFooterLogo';
 import { useTheme } from '../../context/ThemeContext';
-import { ArrowUp, Scissors, Sparkles, RefreshCw } from 'lucide-react';
+import { ArrowUp, Sparkles, Heart } from 'lucide-react';
+import { FOOGLE_BUSINESS_INFO } from '../../data/businessInfo';
 
 
 export interface FooterLink {
@@ -38,28 +39,19 @@ const DEFAULT_COLUMNS: FooterColumn[] = [
   {
     title: 'Connect',
     links: [
-      { label: '+91 294 242 0000', href: 'tel:+912942420000' },
-      { label: 'hello@fooglecafe.com', href: 'mailto:hello@fooglecafe.com' },
+      { label: FOOGLE_BUSINESS_INFO.contact.phone, href: FOOGLE_BUSINESS_INFO.contact.phoneCallHref },
+      { label: FOOGLE_BUSINESS_INFO.contact.email, href: FOOGLE_BUSINESS_INFO.contact.emailMailtoHref },
       { label: 'Panchwati, Udaipur', href: '#contact' },
-      { label: 'Instagram @fooglecafe', href: 'https://instagram.com' },
+      { label: `Instagram @${FOOGLE_BUSINESS_INFO.contact.instagram}`, href: FOOGLE_BUSINESS_INFO.contact.instagramUrl },
     ],
   },
 ];
 
 export const GravityFooter: React.FC = () => {
   const { theme } = useTheme();
-  const gravityRef = useRef<GravityLettersRef>(null);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleManualCollapse = () => {
-    gravityRef.current?.collapse(0.5, 0.4);
-  };
-
-  const handleManualRebuild = () => {
-    gravityRef.current?.rebuild();
   };
 
   const isDark = theme === 'dark';
@@ -139,7 +131,7 @@ export const GravityFooter: React.FC = () => {
           className="mt-12 pt-6 border-t flex flex-wrap items-center justify-between gap-4 text-xs font-mono"
           style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(24, 59, 43, 0.08)' }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-sans font-medium"
               style={{
@@ -147,45 +139,20 @@ export const GravityFooter: React.FC = () => {
                 color: isDark ? '#48BF67' : '#183B2B',
               }}
             >
-              <Scissors className="w-3.5 h-3.5" />
-              <span>Slice through letters to cut</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Official Foogle Emblem · Panchwati, Udaipur</span>
             </span>
 
             <span
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-sans font-medium"
               style={{
-                backgroundColor: isDark ? 'rgba(251, 188, 5, 0.12)' : 'rgba(217, 119, 6, 0.08)',
-                color: isDark ? '#FBBC05' : '#B45309',
+                backgroundColor: isDark ? 'rgba(239, 68, 68, 0.12)' : 'rgba(239, 68, 68, 0.08)',
+                color: isDark ? '#f87171' : '#dc2626',
               }}
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Click to shatter &amp; pour back</span>
+              <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
+              <span>Crafted with love in Panchwati, Udaipur</span>
             </span>
-
-            <button
-              type="button"
-              onClick={handleManualCollapse}
-              title="Crumble headline"
-              className="px-2.5 py-1 rounded-md border text-[11px] font-sans transition-all hover:scale-105 active:scale-95 cursor-pointer opacity-70 hover:opacity-100"
-              style={{
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(24, 59, 43, 0.2)',
-              }}
-            >
-              Crumble
-            </button>
-
-            <button
-              type="button"
-              onClick={handleManualRebuild}
-              title="Rebuild headline"
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border text-[11px] font-sans transition-all hover:scale-105 active:scale-95 cursor-pointer opacity-70 hover:opacity-100"
-              style={{
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(24, 59, 43, 0.2)',
-              }}
-            >
-              <RefreshCw className="w-3 h-3" />
-              <span>Rebuild</span>
-            </button>
           </div>
 
           <button
@@ -203,36 +170,9 @@ export const GravityFooter: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Headline of Glyph Sand you can slice: GRAVITY LETTERS */}
-      <div className="w-full relative h-[320px] sm:h-[420px] md:h-[520px] lg:h-[620px] xl:h-[680px] overflow-hidden mt-4">
-        <GravityLetters
-          ref={gravityRef}
-          text="FOOGLE"
-          fontSize={380}
-          fontWeight={900}
-          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif"
-          colors={
-            isDark
-              ? ['#FFFFFF', '#48BF67']
-              : ['#183B2B', '#E09F3E']
-          }
-          grain="glyph"
-          grainSize={7}
-          grainScale={1.15}
-          gravity={1.15}
-          anchor="bottom"
-          cut={true}
-          cutWidth={18}
-          throwForce={1.35}
-          clickToCollapse={true}
-          collapseSpeed={1500}
-          erosion={0.06}
-          healDelay={1.8}
-          holdTime={0.9}
-          rebuild="sweep"
-          rebuildDuration={0.7}
-          className="w-full h-full"
-        />
+      {/* 2. Authentic Animated Foogle Food-Doodle Emblem Grand Finale */}
+      <div className="w-full relative py-8 sm:py-12 px-4 sm:px-8 lg:px-14 flex items-center justify-center">
+        <AnimatedFooterLogo isDark={isDark} />
       </div>
     </footer>
   );

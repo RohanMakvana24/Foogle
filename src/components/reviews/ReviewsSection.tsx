@@ -382,7 +382,7 @@ export const ReviewsSection: React.FC = () => {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-600 dark:text-zinc-400">
               <Quote className="w-3.5 h-3.5" />
-              Hover To Pause Stream
+              Live Guest Feedback
             </span>
           </div>
         </div>

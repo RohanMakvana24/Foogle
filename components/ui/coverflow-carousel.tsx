@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { buildSrcSet, buildAvifSrcSet } from "../../src/lib/imageSrcSet";
 
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -315,12 +316,23 @@ export function CoverflowCarousel({
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.src}
-                  alt={slide.alt}
-                  draggable={false}
-                  className="h-full w-full select-none object-cover pointer-events-none"
-                />
+                <picture className="contents">
+                  <source
+                    type="image/avif"
+                    srcSet={buildAvifSrcSet(slide.src)}
+                    sizes="(max-width: 640px) 78vw, 340px"
+                  />
+                  <img
+                    src={slide.src}
+                    srcSet={buildSrcSet(slide.src)}
+                    sizes="(max-width: 640px) 78vw, 340px"
+                    alt={slide.alt}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    className="h-full w-full select-none object-cover pointer-events-none"
+                  />
+                </picture>
 
                 {/* Overlaid Title & Price Tag Pill */}
                 {slide.price && (

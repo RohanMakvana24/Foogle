@@ -4,7 +4,8 @@ import { ThemeToggle } from '../common/ThemeToggle';
 import { Button } from '../common/Button';
 import StarBorder from '@/components/ui/StarBorder';
 import { Container } from '../common/Container';
-import { Menu as MenuIcon, X, ArrowUpRight, MapPin, Clock, Phone } from 'lucide-react';
+import { Menu as MenuIcon, X, ArrowUpRight, MapPin, Clock, Phone, ShoppingBag } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
 
 
 export interface NavItem {
@@ -25,6 +26,7 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const { totalItems, openCart } = useCart();
 
   // Detect scroll state for subtle elevation
   useEffect(() => {
@@ -165,9 +167,31 @@ export const Navbar: React.FC = () => {
               })}
             </nav>
 
-            {/* Zone 3: Actions (Theme Toggle + Explore Menu CTA) */}
-            <div className="hidden md:flex items-center gap-3 shrink-0">
-              <ThemeToggle showLabel={false} />
+            {/* Zone 3: Actions (Theme Toggle + Tray Cart + Explore Menu CTA) */}
+            {/* Zone 3: Actions (Theme Toggle + Tray Cart + Explore Menu CTA) */}
+            <div className="hidden md:flex items-center gap-2 shrink-0">
+              {/* 1. Theme Toggle (Clean borderless) */}
+              <ThemeToggle showLabel={false} className="w-10 h-10 border-0 border-none shadow-none bg-transparent" />
+
+              {/* 2. Food Tray / Cart Button (Clean borderless) */}
+              <button
+                type="button"
+                onClick={openCart}
+                aria-label="Open food tray cart"
+                className={`relative inline-flex items-center gap-2 px-3.5 h-10 rounded-xl border-0 border-none text-xs font-bold transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-none ${
+                  totalItems > 0
+                    ? 'bg-amber-500/15 hover:bg-amber-500/25 text-[var(--color-text-primary)]'
+                    : 'bg-transparent hover:bg-neutral-500/10 dark:hover:bg-neutral-400/10 text-[var(--color-text-primary)]'
+                }`}
+              >
+                <ShoppingBag className="w-4 h-4 text-amber-500" />
+                <span>Tray</span>
+                {totalItems > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500 text-black text-[10px] font-black leading-none shadow-xs">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
 
               <StarBorder
                 as="button"
@@ -178,7 +202,7 @@ export const Navbar: React.FC = () => {
                 stars={1}
                 trailLength={0.3}
                 thickness={1}
-                radius={12}
+                radius={9999}
                 glow={0.6}
                 hover="lap"
                 sparkle={false}
@@ -187,27 +211,46 @@ export const Navbar: React.FC = () => {
                 backgroundColor="var(--color-btn-primary-bg)"
                 textColor="var(--color-btn-primary-text)"
                 onClick={() => handleNavClick('#menu')}
-                className="px-4 py-2 text-xs font-semibold cursor-pointer shadow-sm"
+                className="px-5 py-2.5 text-xs font-semibold cursor-pointer shadow-sm rounded-full ml-1"
               >
                 <span>Explore Menu</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </StarBorder>
             </div>
 
-            {/* Mobile Right Bar: Mobile Theme Toggle + Hamburger Toggle */}
-            <div className="flex items-center gap-2 md:hidden">
-              <ThemeToggle showLabel={false} />
+            {/* Mobile Right Bar: Mobile Cart + Mobile Theme Toggle + Hamburger Toggle */}
+            <div className="flex items-center gap-1.5 md:hidden">
+              {/* 1. Mobile Tray Cart Button (Clean borderless) */}
+              <button
+                type="button"
+                onClick={openCart}
+                aria-label="Open food tray cart"
+                className={`relative inline-flex items-center justify-center w-11 h-11 rounded-xl border-0 border-none transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-none ${
+                  totalItems > 0
+                    ? 'bg-amber-500/15 hover:bg-amber-500/25 text-[var(--color-text-primary)]'
+                    : 'bg-transparent hover:bg-neutral-500/10 dark:hover:bg-neutral-400/10 text-[var(--color-text-primary)]'
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5 text-amber-500" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 text-black text-[10px] font-black flex items-center justify-center shadow-md animate-in zoom-in-75 z-10">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
 
+              {/* 2. Mobile Theme Toggle (Clean borderless) */}
+              <ThemeToggle showLabel={false} className="w-11 h-11 border-0 border-none shadow-none bg-transparent" />
+
+              {/* 3. Mobile Hamburger Toggle */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-navigation-drawer"
-                className="inline-flex items-center justify-center w-11 h-11 rounded-lg border transition-colors cursor-pointer focus-visible:outline-2"
+                className="inline-flex items-center justify-center w-11 h-11 rounded-xl border-0 border-none bg-transparent hover:bg-neutral-500/10 dark:hover:bg-neutral-400/10 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-none focus-visible:outline-2"
                 style={{
-                  backgroundColor: 'var(--color-bg-surface)',
-                  borderColor: 'var(--color-border)',
                   color: 'var(--color-text-primary)',
                 }}
               >

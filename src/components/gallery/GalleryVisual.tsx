@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GalleryItem } from '../../types/gallery';
+import { buildSrcSet, buildAvifSrcSet } from '../../lib/imageSrcSet';
 import { TabletopBrandCard } from '../common/TabletopBrandCard';
 
 export interface GalleryVisualProps {
@@ -157,17 +158,27 @@ export const GalleryVisual: React.FC<GalleryVisualProps> = ({
     <div className={`relative w-full h-full overflow-hidden select-none bg-stone-900 ${className}`}>
       {/* 1. Real Cafe Photoshoot Photography */}
       {item.imageUrl && !hasError && (
-        <img
-          src={item.imageUrl}
-          alt={item.alt}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          onLoad={() => setImageLoaded(true)}
-          onError={() => setHasError(true)}
-          className={`w-full h-full object-cover transition-all duration-700 ${
-            imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-          }`}
-        />
+        <picture className="contents">
+          <source
+            type="image/avif"
+            srcSet={buildAvifSrcSet(item.imageUrl)}
+            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 420px"
+          />
+          <img
+            src={item.imageUrl}
+            srcSet={buildSrcSet(item.imageUrl)}
+            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 420px"
+            alt={item.alt}
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setHasError(true)}
+            className={`w-full h-full object-cover transition-all duration-700 ${
+              imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+            }`}
+          />
+        </picture>
       )}
 
       {/* 2. Resilient Vector Fallback / Loading Shimmer */}

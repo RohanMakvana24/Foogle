@@ -41,7 +41,7 @@ export const MenuSection: React.FC = () => {
   // Convert filtered items to Coverflow slides for interactive mobile carousel
   const coverflowSlides = useMemo<CoverflowSlide[]>(() => {
     return filteredItems.map((item) => ({
-      src: item.imageUrl || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80',
+      src: item.imageUrl || '/images/photos/woodfired-pizza.webp',
       alt: item.name,
       title: item.name,
       subtitle: item.description,
@@ -107,9 +107,9 @@ export const MenuSection: React.FC = () => {
           <div className="mb-2 flex items-center justify-between px-1 text-[11px] text-zinc-500 font-medium">
             <span className="flex items-center gap-1 text-amber-700 dark:text-amber-300 font-semibold">
               <Smartphone className="w-3 h-3" />
-              Swipe 3D Menu
+              Swipe To Browse
             </span>
-            <span>Tap arrow or drag cards</span>
+            <span>Explore dishes</span>
           </div>
 
           <CoverflowCarousel
