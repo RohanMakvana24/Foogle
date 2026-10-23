@@ -67,7 +67,7 @@ export const ContainerScroll = ({
         ref={scrollRef}
         className={cn("relative min-h-[120vh]", className)}
         style={{
-          perspective: "1000px",
+          perspective: "1200px",
           perspectiveOrigin: "center top",
           transformStyle: "preserve-3d",
           ...style,
@@ -93,7 +93,7 @@ export const ContainerSticky = ({
         className
       )}
       style={{
-        perspective: "1000px",
+        perspective: "1200px",
         perspectiveOrigin: "center top",
         transformStyle: "preserve-3d",
         transformOrigin: "50% 50%",
@@ -112,21 +112,21 @@ export const GalleryContainer = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div">) => {
   const { scrollYProgress } = useContainerScrollContext();
-  // As user scrolls from 0 to 0.5, cards tilt from 65deg up to 0deg (3D tilt into view), scale adjusts
-  const rotateX = useTransform(scrollYProgress, [0, 0.45], [65, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.45, 0.9], [1.15, 1, 0.96]);
+  // EXACT DEMO SPEC: rotateX from 75 to 0 as user scrolls from 0 to 0.5, then scale from 1.2 to 1
+  const rotateX = useTransform(scrollYProgress, [0, 0.5], [75, 0]);
+  const scale = useTransform(scrollYProgress, [0.5, 0.9], [1.2, 1]);
 
   return (
     <motion.div
       className={cn(
-        "relative grid size-full grid-cols-3 gap-3 sm:gap-4 md:gap-5 rounded-2xl will-change-transform",
+        "relative grid size-full grid-cols-3 gap-2 sm:gap-4 md:gap-5 rounded-2xl will-change-transform",
         className
       )}
       style={{
         rotateX,
         scale,
         transformStyle: "preserve-3d",
-        perspective: "1000px",
+        perspective: "1200px",
         ...style,
       }}
       {...props}
@@ -144,11 +144,12 @@ export const GalleryCol = ({
   ...props
 }: HTMLMotionProps<"div"> & { yRange?: string[] }) => {
   const { scrollYProgress } = useContainerScrollContext();
-  const y = useTransform(scrollYProgress, [0, 1], yRange);
+  // EXACT DEMO SPEC: y translates over [0.5, 1] using yRange
+  const y = useTransform(scrollYProgress, [0.5, 1], yRange);
 
   return (
     <motion.div
-      className={cn("relative flex w-full flex-col gap-3 sm:gap-4 md:gap-5 will-change-transform", className)}
+      className={cn("relative flex w-full flex-col gap-2 sm:gap-4 md:gap-5 will-change-transform", className)}
       style={{
         y,
         ...style,
@@ -171,14 +172,14 @@ export const ContainerStagger = React.forwardRef<
       whileInView={"visible"}
       viewport={{ once: true, ...viewport }}
       transition={{
-        staggerChildren: 0.15,
+        staggerChildren: 0.2,
         ...transition,
       }}
       {...props}
     />
   );
 });
-ContainerStagger.displayName = "ContainerStagger";
+ContainerStagger.displayName = "ContainerStagger"
 
 export const ContainerAnimated = React.forwardRef<
   HTMLDivElement,
