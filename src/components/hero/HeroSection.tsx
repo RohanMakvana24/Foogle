@@ -298,18 +298,18 @@ export const HeroSection: React.FC = () => {
                   boxShadow: 'var(--shadow-elevated)',
                 }}
               >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0 pr-1">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h3
-                        className="text-sm sm:text-base font-extrabold tracking-tight"
+                        className="text-sm sm:text-base font-extrabold tracking-tight truncate max-w-full"
                         style={{ color: 'var(--color-text-primary)' }}
                       >
                         Mexican Premium Burger
                       </h3>
                       
                       {/* Dynamic Badge: Chef's Pick -> Flame-Grilled when assembled */}
-                      <div className="relative">
+                      <div className="relative inline-flex items-center shrink-0">
                         <motion.span
                           style={{ opacity: defaultBadgeOpacity }}
                           className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400"
@@ -324,11 +324,11 @@ export const HeroSection: React.FC = () => {
                         </motion.span>
                       </div>
                     </div>
-                    <p className="mt-0.5 text-[11px] font-medium" style={{ color: 'var(--color-text-tertiary)' }}>
+                    <p className="mt-1 text-[11px] font-medium leading-tight" style={{ color: 'var(--color-text-tertiary)' }}>
                       Double smashed patty · melted gouda · smoked paprika
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0 pl-1">
                     <span className="text-lg sm:text-xl font-black text-amber-600 dark:text-amber-400">
                       ₹289
                     </span>

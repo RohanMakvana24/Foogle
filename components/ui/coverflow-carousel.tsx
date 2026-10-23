@@ -45,6 +45,7 @@ export interface CoverflowCarouselProps {
   className?: string;
   cardClassName?: string;
   onCardClick?: (slide: CoverflowSlide, index: number) => void;
+  renderAction?: (slide: CoverflowSlide, index: number) => React.ReactNode;
 }
 
 export function CoverflowCarousel({
@@ -64,6 +65,7 @@ export function CoverflowCarousel({
   className,
   cardClassName,
   onCardClick,
+  renderAction,
 }: CoverflowCarouselProps) {
   const count = slides.length;
 
@@ -430,6 +432,11 @@ export function CoverflowCarousel({
                   {row.value}
                 </span>
               ))}
+            </div>
+          )}
+          {renderAction && (
+            <div className="mt-3.5 flex items-center justify-center w-full">
+              {renderAction(active, selected)}
             </div>
           )}
         </div>

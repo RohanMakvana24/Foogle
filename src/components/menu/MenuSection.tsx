@@ -6,10 +6,40 @@ import { MenuCard } from './MenuCard';
 import { CoverflowCarousel, CoverflowSlide } from '@/components/ui/coverflow-carousel';
 import { MENU_CATEGORIES, MENU_ITEMS } from '../../data/menuData';
 import { MenuCategoryId } from '../../types/menu';
-import { Sparkles, Info, ArrowRight, HandMetal, Smartphone } from 'lucide-react';
+import { Sparkles, Info, ArrowRight, HandMetal, Smartphone, Plus, Check } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+
+const CATEGORY_DEFAULT_PRICES: Record<string, number> = {
+  pizza: 279,
+  sandwiches: 189,
+  pasta: 249,
+  'sides-snacks': 159,
+  'cafe-specials': 219,
+  desserts: 199,
+};
+
 
 export const MenuSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<MenuCategoryId>('all');
+  const { addItem } = useCart();
+  const [justAddedId, setJustAddedId] = useState<string | null>(null);
+
+  const handleAddSlideToCart = (item: any) => {
+    const numericPrice = item.price
+      ? parseInt(item.price.replace(/\D/g, ''), 10) || 249
+      : CATEGORY_DEFAULT_PRICES[item.categoryId] || 229;
+
+    addItem({
+      id: item.id,
+      name: item.name,
+      price: numericPrice,
+      category: item.categoryLabel,
+      description: item.description,
+      imageUrl: item.imageUrl,
+    });
+    setJustAddedId(item.id);
+    setTimeout(() => setJustAddedId(null), 1600);
+  };
 
   // Compute item counts for each category
   const itemCounts = useMemo(() => {
@@ -40,18 +70,24 @@ export const MenuSection: React.FC = () => {
 
   // Convert filtered items to Coverflow slides for interactive mobile carousel
   const coverflowSlides = useMemo<CoverflowSlide[]>(() => {
-    return filteredItems.map((item) => ({
-      src: item.imageUrl || '/images/photos/woodfired-pizza.webp',
-      alt: item.name,
-      title: item.name,
-      subtitle: item.description,
-      tag: item.categoryLabel,
-      meta: [
-        { label: 'Category', value: item.categoryLabel },
-        { label: 'Crafted In', value: 'Panchwati, Udaipur' },
-      ],
-      isVeg: true,
-    }));
+    return filteredItems.map((item) => {
+      const numericPrice = item.price
+        ? parseInt(item.price.replace(/\D/g, ''), 10) || 249
+        : CATEGORY_DEFAULT_PRICES[item.categoryId] || 229;
+      return {
+        src: item.imageUrl || '/images/photos/woodfired-pizza.webp',
+        alt: item.name,
+        title: item.name,
+        subtitle: item.description,
+        price: '₹' + numericPrice,
+        tag: item.categoryLabel,
+        meta: [
+          { label: 'Category', value: item.categoryLabel },
+          { label: 'Crafted In', value: 'Panchwati, Udaipur' },
+        ],
+        isVeg: true,
+      };
+    });
   }, [filteredItems]);
 
   return (
@@ -120,6 +156,35 @@ export const MenuSection: React.FC = () => {
             showPagination={true}
             cardWidth="clamp(210px, 66vw, 270px)"
             className="pb-2"
+            renderAction={(activeSlide, index) => {
+              const currentItem = filteredItems[index];
+              if (!currentItem) return null;
+              const isAdded = justAddedId === currentItem.id;
+              return (
+                <button
+                  type="button"
+                  onClick={() => handleAddSlideToCart(currentItem)}
+                  aria-label={`Add ${currentItem.name} to order tray`}
+                  className={`inline-flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer shadow-md active:scale-95 ${
+                    isAdded
+                      ? 'bg-emerald-600 text-white scale-105'
+                      : 'bg-amber-500 hover:bg-amber-400 text-black'
+                  }`}
+                >
+                  {isAdded ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Added to Tray ✓</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 stroke-[2.5]" />
+                      <span>Add to Tray</span>
+                    </>
+                  )}
+                </button>
+              );
+            }}
           />
         </div>
 
