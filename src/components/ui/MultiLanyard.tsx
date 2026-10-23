@@ -644,12 +644,15 @@ export const MultiLanyard: React.FC<MultiLanyardProps> = ({
 
       const numItems = badgeObjects.length;
       badgeObjects.forEach((obj, idx) => {
+        const currentItem = itemsRef.current[idx] || obj.item;
         let anchorRatio = 0.5;
-        if (numItems === 3) {
-          const ratios = [0.22, 0.50, 0.78];
+        if (typeof currentItem?.anchor === 'number') {
+          anchorRatio = currentItem.anchor;
+        } else if (numItems === 3) {
+          const ratios = [1 / 6, 3 / 6, 5 / 6];
           anchorRatio = ratios[idx];
         } else if (numItems === 2) {
-          const ratios = [0.35, 0.65];
+          const ratios = [0.25, 0.75];
           anchorRatio = ratios[idx];
         }
 

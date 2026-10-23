@@ -22,6 +22,17 @@ export const LanyardBadgesSection: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Synchronous canvas textures generated instantly without async delay or blank state
   const badgeItems: MultiBadgeItem[] = useMemo(() => {
     try {
@@ -37,6 +48,11 @@ export const LanyardBadgesSection: React.FC = () => {
       const fBack = createFacebookBackCanvas();
       const fStrap = createStrapCanvas('facebook');
 
+      // On mobile track (300vw width with 3 x 100vw slides):
+      // Centers are at 50vw / 300vw = 1/6 (0.1667), 150vw / 300vw = 0.5, 250vw / 300vw = 5/6 (0.8333).
+      // On desktop (full width single view): 0.22, 0.50, 0.78.
+      const anchors = isMobile ? [1 / 6, 0.5, 5 / 6] : [0.22, 0.5, 0.78];
+
       return [
         {
           id: 'google',
@@ -45,7 +61,7 @@ export const LanyardBadgesSection: React.FC = () => {
           strapCanvas: gStrap,
           cardColor: '#0f1e2e',
           metal: 'gold',
-          anchor: 0.22,
+          anchor: anchors[0],
         },
         {
           id: 'instagram',
@@ -54,7 +70,7 @@ export const LanyardBadgesSection: React.FC = () => {
           strapCanvas: iStrap,
           cardColor: '#2d0a24',
           metal: 'gold',
-          anchor: 0.50,
+          anchor: anchors[1],
         },
         {
           id: 'facebook',
@@ -63,14 +79,14 @@ export const LanyardBadgesSection: React.FC = () => {
           strapCanvas: fStrap,
           cardColor: '#091a36',
           metal: 'silver',
-          anchor: 0.78,
+          anchor: anchors[2],
         },
       ];
     } catch (e) {
       console.error('Error generating badge canvas textures:', e);
       return [];
     }
-  }, []);
+  }, [isMobile]);
 
   // Update active card tab as user scrolls horizontally on mobile
   const handleScroll = () => {
