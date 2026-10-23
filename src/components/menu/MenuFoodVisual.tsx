@@ -201,8 +201,8 @@ export const MenuFoodVisual: React.FC<MenuFoodVisualProps> = ({
             referrerPolicy="no-referrer"
             onLoad={() => setImageLoaded(true)}
             onError={() => setHasError(true)}
-            className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
-              imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-102'
+            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+              imageLoaded ? 'scale-100' : 'scale-[1.01]'
             }`}
           />
         </picture>

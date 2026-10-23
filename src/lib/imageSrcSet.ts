@@ -10,7 +10,7 @@
 export function buildSrcSet(src?: string): string | undefined {
   if (!src) return undefined;
 
-  const match = src.match(/^\/images\/(photos|dishes)\/(.+)\.webp$/);
+  const match = src.match(/^(\/images(?:\/photos|\/dishes)?)\/(.+)\.webp$/);
   if (!match) return undefined;
 
   const [, folder, name] = match;
@@ -18,11 +18,11 @@ export function buildSrcSet(src?: string): string | undefined {
   // Already a sized variant (e.g. foo-400.webp) — do not nest srcsets.
   if (/-\d+$/.test(name)) return undefined;
 
-  if (folder === 'dishes') {
-    return `/images/dishes/${name}-480.webp 480w, ${src} 900w`;
+  if (folder === '/images/dishes') {
+    return `${folder}/${name}-480.webp 480w, ${src} 900w`;
   }
 
-  return `/images/photos/${name}-400.webp 400w, /images/photos/${name}-800.webp 800w, ${src} 1200w`;
+  return `${folder}/${name}-400.webp 400w, ${folder}/${name}-800.webp 800w, ${src} 1200w`;
 }
 
 /**
@@ -32,15 +32,15 @@ export function buildSrcSet(src?: string): string | undefined {
 export function buildAvifSrcSet(src?: string): string | undefined {
   if (!src) return undefined;
 
-  const match = src.match(/^\/images\/(photos|dishes)\/(.+)\.webp$/);
+  const match = src.match(/^(\/images(?:\/photos|\/dishes)?)\/(.+)\.webp$/);
   if (!match) return undefined;
 
   const [, folder, name] = match;
   if (/-\d+$/.test(name)) return undefined;
 
-  if (folder === 'dishes') {
-    return `/images/dishes/${name}-480.avif 480w, /images/dishes/${name}-720.avif 720w, /images/dishes/${name}-900.avif 900w`;
+  if (folder === '/images/dishes') {
+    return `${folder}/${name}-480.avif 480w, ${folder}/${name}-720.avif 720w, ${folder}/${name}-900.avif 900w`;
   }
 
-  return `/images/photos/${name}-400.avif 400w, /images/photos/${name}-800.avif 800w, /images/photos/${name}-1200.avif 1200w`;
+  return `${folder}/${name}-400.avif 400w, ${folder}/${name}-800.avif 800w, ${folder}/${name}-1200.avif 1200w`;
 }

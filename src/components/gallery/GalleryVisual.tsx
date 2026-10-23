@@ -174,8 +174,8 @@ export const GalleryVisual: React.FC<GalleryVisualProps> = ({
             referrerPolicy="no-referrer"
             onLoad={() => setImageLoaded(true)}
             onError={() => setHasError(true)}
-            className={`w-full h-full object-cover transition-all duration-700 ${
-              imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+            className={`w-full h-full object-cover transition-transform duration-500 ${
+              imageLoaded ? 'scale-100' : 'scale-[1.01]'
             }`}
           />
         </picture>

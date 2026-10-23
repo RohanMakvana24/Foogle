@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TabletopBrandCard } from '../common/TabletopBrandCard';
+import { buildAvifSrcSet, buildSrcSet } from '../../lib/imageSrcSet';
 
 /**
  * HeroCulinaryShowcase Component
@@ -43,17 +44,28 @@ export const HeroCulinaryShowcase: React.FC = () => {
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           {/* 1. Real Commercial Cafe Food Photography */}
           {!heroImageError && (
-            <img
-              src={heroImageUrl}
-              alt="Artisanal cafe spread with woodfired pizza, fresh burrata, and gourmet pasta on rustic tabletop with Foogle brand card"
-              referrerPolicy="no-referrer"
-              loading="eager"
-              onLoad={() => setHeroImageLoaded(true)}
-              onError={() => setHeroImageError(true)}
-              className={`w-full h-full object-cover transition-all duration-700 hover:scale-105 ${
-                heroImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-102'
-              }`}
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={buildAvifSrcSet(heroImageUrl)}
+                sizes="(max-width: 640px) 100vw, 560px"
+              />
+              <img
+                src={heroImageUrl}
+                srcSet={buildSrcSet(heroImageUrl)}
+                sizes="(max-width: 640px) 100vw, 560px"
+                alt="Artisanal cafe spread with woodfired pizza, fresh burrata, and gourmet pasta on rustic tabletop with Foogle brand card"
+                referrerPolicy="no-referrer"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                onLoad={() => setHeroImageLoaded(true)}
+                onError={() => setHeroImageError(true)}
+                className={`w-full h-full object-cover transition-all duration-700 hover:scale-105 ${
+                  heroImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-102'
+                }`}
+              />
+            </picture>
           )}
 
           {/* 2. Resilient Vector Culinary Fallback / Loading Shimmer */}
@@ -154,16 +166,26 @@ export const HeroCulinaryShowcase: React.FC = () => {
         <div className="flex items-center gap-3">
           {/* Square Mini Beverage Real Photo Preview */}
           <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 relative bg-stone-800 border border-stone-200/20">
-            <img
-              src={drinkImageUrl}
-              alt="Artisanal iced latte with velvety foam"
-              referrerPolicy="no-referrer"
-              loading="lazy"
-              onLoad={() => setDrinkImageLoaded(true)}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
-                drinkImageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={buildAvifSrcSet(drinkImageUrl)}
+                sizes="48px"
+              />
+              <img
+                src={drinkImageUrl}
+                srcSet={buildSrcSet(drinkImageUrl)}
+                sizes="48px"
+                alt="Artisanal iced latte with velvety foam"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setDrinkImageLoaded(true)}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  drinkImageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            </picture>
             {!drinkImageLoaded && (
               <div
                 className="absolute inset-0 flex items-center justify-center text-xs font-bold"

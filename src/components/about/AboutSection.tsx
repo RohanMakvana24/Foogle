@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from '../common/Container';
-import { buildSrcSet } from '../../lib/imageSrcSet';
+import { buildAvifSrcSet, buildSrcSet } from '../../lib/imageSrcSet';
 import { SectionHeading } from '../common/SectionHeading';
 import { TabletopBrandCard } from '../common/TabletopBrandCard';
 import { Sparkles, Utensils, HeartHandshake, Coffee } from 'lucide-react';
@@ -40,14 +40,22 @@ export const AboutSection: React.FC = () => {
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 {/* Real Foogle Cafe Entrance Photography */}
-                <img
-                  src="/images/foogle-entrance-hero.webp"
-                  srcSet={buildSrcSet('/images/foogle-entrance-hero.webp')}
-                  sizes="(max-width: 1024px) 100vw, 620px"
-                  alt="Foogle Cafe colorful neon facade and outdoor dining in Panchwati, Udaipur"
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={buildAvifSrcSet('/images/foogle-entrance-hero.webp')}
+                    sizes="(max-width: 1024px) 100vw, 620px"
+                  />
+                  <img
+                    src="/images/foogle-entrance-hero.webp"
+                    srcSet={buildSrcSet('/images/foogle-entrance-hero.webp')}
+                    sizes="(max-width: 1024px) 100vw, 620px"
+                    alt="Foogle Cafe colorful neon facade and outdoor dining in Panchwati, Udaipur"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
+                  />
+                </picture>
 
                 {/* Subtle Bottom Vignette */}
                 <div
