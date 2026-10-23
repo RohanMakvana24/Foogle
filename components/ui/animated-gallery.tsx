@@ -112,13 +112,14 @@ export const GalleryContainer = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div">) => {
   const { scrollYProgress } = useContainerScrollContext();
-  const rotateX = useTransform(scrollYProgress, [0, 0.45], [45, 0]);
-  const scale = useTransform(scrollYProgress, [0.45, 0.9], [1.1, 1]);
+  // As user scrolls from 0 to 0.5, cards tilt from 65deg up to 0deg (3D tilt into view), scale adjusts
+  const rotateX = useTransform(scrollYProgress, [0, 0.45], [65, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.45, 0.9], [1.15, 1, 0.96]);
 
   return (
     <motion.div
       className={cn(
-        "relative grid size-full grid-cols-3 gap-2.5 sm:gap-4 md:gap-5 rounded-2xl",
+        "relative grid size-full grid-cols-3 gap-3 sm:gap-4 md:gap-5 rounded-2xl will-change-transform",
         className
       )}
       style={{
@@ -143,11 +144,11 @@ export const GalleryCol = ({
   ...props
 }: HTMLMotionProps<"div"> & { yRange?: string[] }) => {
   const { scrollYProgress } = useContainerScrollContext();
-  const y = useTransform(scrollYProgress, [0.3, 1], yRange);
+  const y = useTransform(scrollYProgress, [0, 1], yRange);
 
   return (
     <motion.div
-      className={cn("relative flex w-full flex-col gap-2.5 sm:gap-4 md:gap-5", className)}
+      className={cn("relative flex w-full flex-col gap-3 sm:gap-4 md:gap-5 will-change-transform", className)}
       style={{
         y,
         ...style,
