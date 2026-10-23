@@ -112,7 +112,7 @@ export const LanyardBadgesSection: React.FC = () => {
   return (
     <div className="w-full relative mt-8 sm:mt-12 pt-2 sm:pt-4 overflow-visible">
       {/* Mobile Interactive Tab Switcher (Visible on mobile only) */}
-      <div className="flex sm:hidden items-center justify-between gap-2 px-4 mb-4 mt-2">
+      <div className="flex sm:hidden items-center justify-between gap-2 px-0 sm:px-4 mb-4 mt-2">
         <div className="flex items-center gap-1.5 p-1 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 w-full justify-between">
           <button
             type="button"
@@ -163,7 +163,7 @@ export const LanyardBadgesSection: React.FC = () => {
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="w-full overflow-x-auto sm:overflow-visible scrollbar-none snap-x snap-mandatory scroll-smooth"
+        className="-mx-4 sm:mx-0 w-[calc(100%+2rem)] sm:w-full overflow-x-auto sm:overflow-visible scrollbar-none snap-x snap-mandatory scroll-smooth"
         style={{
           WebkitOverflowScrolling: 'touch',
         }}
