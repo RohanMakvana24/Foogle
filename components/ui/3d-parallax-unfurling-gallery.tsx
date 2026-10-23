@@ -61,7 +61,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
           srcSet={buildSrcSet(src)}
           sizes="(max-width: 640px) 80vw, 460px"
           alt={alt}
-          loading="lazy"
+          loading="eager"
           decoding="async"
           onLoad={onLoad}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -106,9 +106,14 @@ export default function ThreeDParallaxUnfurlingGallery({
   }, [isReady]);
 
   useEffect(() => {
-    const t = setTimeout(() => setIsReady(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
+    // Proactively preload all gallery image URLs in parallel as soon as component mounts
+    const activeList = images && images.length >= 4 ? images : DEFAULT_GALLERY_IMAGES;
+    activeList.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+    setIsReady(true);
+  }, [images]);
 
   const colMedia = useMemo(() => {
     const activeList =
