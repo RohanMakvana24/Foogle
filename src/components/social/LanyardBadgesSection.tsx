@@ -4,8 +4,14 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { MultiBadgeItem } from '../ui/MultiLanyard';
 import { LazyMount } from '../common/LazyMount';
 
-// three.js based badges (~600KB) — loaded only when this section nears the viewport.
-const MultiLanyard = React.lazy(() => import('../ui/MultiLanyard'));
+// three.js based badges — preload module in background so there is 0 delay when user scrolls
+const MultiLanyardPromise = import('../ui/MultiLanyard');
+const MultiLanyard = React.lazy(() => MultiLanyardPromise);
+if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+  window.requestIdleCallback(() => {
+    MultiLanyardPromise.catch(() => {});
+  });
+}
 import {
   createGoogleFrontCanvas,
   createGoogleBackCanvas,
@@ -175,7 +181,7 @@ export const LanyardBadgesSection: React.FC = () => {
               <LazyMount
                 className="w-full h-full"
                 minHeight="540px"
-                rootMargin="400px 0px"
+                rootMargin="1200px 0px"
                 placeholder={<div className="w-full h-full" aria-hidden="true" />}
               >
                 <MultiLanyard items={badgeItems} className="w-full h-full" breeze={0.35} interactive={true} />
