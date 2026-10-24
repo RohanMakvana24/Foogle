@@ -1,11 +1,17 @@
 'use client';
 
 import React, { useMemo, useRef, useState, useEffect } from 'react';
-import type { MultiBadgeItem } from '../ui/MultiLanyard';
+import { MultiBadgeItem } from '../ui/MultiLanyard';
 import { LazyMount } from '../common/LazyMount';
 
 // three.js based badges — preload module in background so there is 0 delay when user scrolls
-const MultiLanyard = React.lazy(() => import('../ui/MultiLanyard'));
+const MultiLanyardPromise = import('../ui/MultiLanyard');
+const MultiLanyard = React.lazy(() => MultiLanyardPromise);
+if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+  window.requestIdleCallback(() => {
+    MultiLanyardPromise.catch(() => {});
+  });
+}
 import {
   createGoogleFrontCanvas,
   createGoogleBackCanvas,
@@ -22,9 +28,7 @@ export const LanyardBadgesSection: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
 
-  const [isMobile, setIsMobile] = useState<boolean>(
-    () => typeof window !== 'undefined' && window.innerWidth < 640
-  );
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -37,8 +41,6 @@ export const LanyardBadgesSection: React.FC = () => {
 
   // Synchronous canvas textures generated instantly without async delay or blank state
   const badgeItems: MultiBadgeItem[] = useMemo(() => {
-    if (isMobile) return [];
-
     try {
       const gFront = createGoogleFrontCanvas();
       const gBack = createGoogleBackCanvas();
@@ -174,26 +176,8 @@ export const LanyardBadgesSection: React.FC = () => {
       >
         <div className="w-[300vw] sm:w-full flex flex-col">
           {/* Unified 3D Stage */}
-          <div className={`relative w-full ${isMobile ? 'h-[210px]' : 'h-[540px] sm:h-[620px]'} overflow-visible`}>
-            {isMobile ? (
-              <div className="flex h-full w-full">
-                {[
-                  { label: 'Google', detail: '4.9 rating', tone: 'from-amber-400 to-orange-500' },
-                  { label: 'Instagram', detail: '@foogle_foods', tone: 'from-rose-500 to-pink-600' },
-                  { label: 'Facebook', detail: 'Foogle Cafe', tone: 'from-blue-500 to-indigo-600' },
-                ].map((card) => (
-                  <div key={card.label} className="w-[100vw] shrink-0 snap-center px-8 flex items-center justify-center">
-                    <div className={`w-full max-w-[320px] rounded-3xl bg-gradient-to-br ${card.tone} p-[1px] shadow-lg`}>
-                      <div className="rounded-[23px] bg-[var(--color-bg-surface)] px-6 py-8 text-center">
-                        <p className="text-lg font-black" style={{ color: 'var(--color-text-primary)' }}>{card.label}</p>
-                        <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>{card.detail}</p>
-                        <p className="mt-4 text-xs font-semibold text-amber-600 dark:text-amber-400">Tap below to connect</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : badgeItems.length === 3 ? (
+          <div className="relative w-full h-[540px] sm:h-[620px] overflow-visible">
+            {badgeItems.length === 3 ? (
               <LazyMount
                 className="w-full h-full"
                 minHeight="540px"
