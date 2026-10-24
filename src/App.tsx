@@ -10,8 +10,6 @@ import { HeroSection } from './components/hero/HeroSection';
 import { SignatureDishesSection } from './components/signature/SignatureDishesSection';
 import { MenuSection } from './components/menu/MenuSection';
 import { AboutSection } from './components/about/AboutSection';
-import { GallerySection } from './components/gallery/GallerySection';
-import { ReviewsSection } from './components/reviews/ReviewsSection';
 import { LocationSection } from './components/location/LocationSection';
 import { ContactSection } from './components/contact/ContactSection';
 import { VisitCtaSection } from './components/cta/VisitCtaSection';
@@ -19,6 +17,21 @@ import { GravityFooter } from './components/footer/GravityFooter';
 import { CartProvider } from './context/CartContext';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { FloatingCartBar } from './components/cart/FloatingCartBar';
+import { LazyMount } from './components/common/LazyMount';
+
+// These sections contain the heaviest animation and media code.  Loading them
+// shortly before they enter view keeps initial mobile scrolling responsive.
+const GallerySection = React.lazy(() => import('./components/gallery/GallerySection'));
+const ReviewsSection = React.lazy(() => import('./components/reviews/ReviewsSection'));
+
+const DeferredSectionPlaceholder: React.FC<{ id: string; minHeight: string }> = ({ id, minHeight }) => (
+  <section
+    id={id}
+    aria-busy="true"
+    className="w-full"
+    style={{ minHeight, backgroundColor: 'var(--color-bg-page)' }}
+  />
+);
 
 function FoogleWebsite() {
 
@@ -42,10 +55,22 @@ function FoogleWebsite() {
         <AboutSection />
 
         {/* Phase 4: Premium Food & Cafe Gallery (Anchor #gallery) */}
-        <GallerySection />
+        <LazyMount
+          minHeight="760px"
+          rootMargin="900px 0px"
+          placeholder={<DeferredSectionPlaceholder id="gallery" minHeight="760px" />}
+        >
+          <GallerySection />
+        </LazyMount>
 
         {/* Phase 5: Customer Reviews Destination */}
-        <ReviewsSection />
+        <LazyMount
+          minHeight="620px"
+          rootMargin="700px 0px"
+          placeholder={<DeferredSectionPlaceholder id="reviews" minHeight="620px" />}
+        >
+          <ReviewsSection />
+        </LazyMount>
 
         {/* Phase 5: Location Information */}
         <LocationSection />

@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  useCallback,
 } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Maximize2 } from "lucide-react";
@@ -35,6 +34,54 @@ export interface ImageCardProps {
   onClick?: () => void;
 }
 
+/**
+ * The desktop scene intentionally uses a large, animated image matrix.  On a
+ * phone, doing that work on every scroll frame competes with touch scrolling,
+ * so use the original images once in a native, browser-optimised grid instead.
+ */
+const MobileGallery: React.FC<{
+  images: string[];
+  onImageClick?: (src: string, index: number) => void;
+}> = ({ images, onImageClick }) => (
+  <div
+    className="grid grid-cols-2 gap-3 px-4 pb-10"
+    aria-label="Foogle Cafe photo gallery"
+  >
+    {images.map((src, index) => (
+      <button
+        key={src}
+        type="button"
+        onClick={() => onImageClick?.(src, index)}
+        className={`mobile-gallery-card group relative overflow-hidden rounded-2xl bg-[var(--color-bg-surface)] text-left ${
+          index % 5 === 0 ? "col-span-2 aspect-[16/10]" : "aspect-[4/5]"
+        }`}
+        style={{
+          contentVisibility: "auto",
+          containIntrinsicSize: index % 5 === 0 ? "320px" : "240px",
+        }}
+      >
+        <picture>
+          <source
+            type="image/avif"
+            srcSet={buildAvifSrcSet(src)}
+            sizes={index % 5 === 0 ? "calc(100vw - 2rem)" : "calc(50vw - 1.4rem)"}
+          />
+          <img
+            src={src}
+            srcSet={buildSrcSet(src)}
+            sizes={index % 5 === 0 ? "calc(100vw - 2rem)" : "calc(50vw - 1.4rem)"}
+            alt={`Foogle Cafe gallery photo ${index + 1}`}
+            loading={index < 2 ? "eager" : "lazy"}
+            fetchPriority={index === 0 ? "high" : "auto"}
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+        </picture>
+      </button>
+    ))}
+  </div>
+);
+
 const ImageCard: React.FC<ImageCardProps> = ({
   src,
   alt = "Foogle Cafe Gallery Moment",
@@ -61,7 +108,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
           srcSet={buildSrcSet(src)}
           sizes="(max-width: 640px) 80vw, 460px"
           alt={alt}
-          loading="eager"
+          loading="lazy"
           decoding="async"
           onLoad={onLoad}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -97,23 +144,6 @@ export default function ThreeDParallaxUnfurlingGallery({
 }: ThreeDParallaxUnfurlingGalleryProps) {
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false);
-  const loadedCountRef = useRef(0);
-
-  const handleItemLoad = useCallback(() => {
-    loadedCountRef.current += 1;
-    if (!isReady && loadedCountRef.current >= 1) setIsReady(true);
-  }, [isReady]);
-
-  useEffect(() => {
-    // Proactively preload all gallery image URLs in parallel as soon as component mounts
-    const activeList = images && images.length >= 4 ? images : DEFAULT_GALLERY_IMAGES;
-    activeList.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-    setIsReady(true);
-  }, [images]);
 
   const colMedia = useMemo(() => {
     const activeList =
@@ -151,7 +181,9 @@ export default function ThreeDParallaxUnfurlingGallery({
     mass: 0.4,
   });
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 640
+  );
 
   useEffect(() => {
     const updateSize = () => {
@@ -201,6 +233,11 @@ export default function ThreeDParallaxUnfurlingGallery({
     const clamped = Math.min(Math.max((p - 0.18) / (0.65 - 0.18), 0), 1);
     return 1 - clamped * 0.25;
   });
+
+  if (isMobile) {
+    const activeList = images && images.length >= 4 ? images : DEFAULT_GALLERY_IMAGES;
+    return <MobileGallery images={activeList} onImageClick={onImageClick} />;
+  }
 
   const content = (
     <div
@@ -286,7 +323,6 @@ export default function ThreeDParallaxUnfurlingGallery({
                   <ImageCard
                     key={`col1-${index}`}
                     src={src}
-                    onLoad={handleItemLoad}
                     onClick={() => onImageClick?.(src, index)}
                   />
                 ))}
@@ -304,7 +340,6 @@ export default function ThreeDParallaxUnfurlingGallery({
                   <ImageCard
                     key={`col2-${index}`}
                     src={src}
-                    onLoad={handleItemLoad}
                     onClick={() => onImageClick?.(src, index)}
                   />
                 ))}
@@ -324,7 +359,6 @@ export default function ThreeDParallaxUnfurlingGallery({
                   <ImageCard
                     key={`col3-${index}`}
                     src={src}
-                    onLoad={handleItemLoad}
                     onClick={() => onImageClick?.(src, index)}
                   />
                 ))}
@@ -344,7 +378,6 @@ export default function ThreeDParallaxUnfurlingGallery({
                   <ImageCard
                     key={`col4-${index}`}
                     src={src}
-                    onLoad={handleItemLoad}
                     onClick={() => onImageClick?.(src, index)}
                   />
                 ))}
